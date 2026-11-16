@@ -1,0 +1,6 @@
+# Direct dependencies pinned. Full transitive lock pending successful installation.
+Django==5.2.19
+psycopg[binary]==3.2.13
+pyotp==2.9.0
+cryptography==50.0.2
+qrcode==8.2

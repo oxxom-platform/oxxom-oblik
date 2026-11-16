@@ -1,0 +1,28 @@
+[Unit]
+Description=OXXOM OBLIK web application
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=oxxom
+Group=oxxom
+WorkingDirectory=/srv/oxxom-oblik/app/backend
+EnvironmentFile=/etc/oxxom-oblik/app.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/srv/oxxom-oblik/venv/bin/gunicorn config.wsgi:application --bind 127.0.0.1:4181 --workers 2 --worker-class gthread --threads 2 --timeout 60 --max-requests 1000 --max-requests-jitter 100 --forwarded-allow-ips 127.0.0.1 --no-control-socket --access-logfile - --error-logfile - --access-logformat '%%(h)s %%(t)s "%%(m)s %%(U)s %%(H)s" %%(s)s %%(L)s'
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=75
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+
+[Install]
+WantedBy=multi-user.target

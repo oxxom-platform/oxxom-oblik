@@ -1,0 +1,28 @@
+OXXOM OBLIK — migration preparation, 2026-11-16
+
+Local checks:
+- 13 migration safety unit tests: PASS (synthetic data, mocked restore commands).
+- 9 existing configuration unit tests: PASS.
+- 17 Bash/zsh documentation blocks: syntax PASS.
+- 7 Python deployment/test files: syntax PASS.
+- Git ignores local .env, MFA key, hosting metadata and migration/backup paths.
+- Gunicorn 27.0.1 pinned; Python requirement >=3.10 verified from PyPI metadata.
+- Actual unit ExecStart arguments, with systemd %% unescaped: --check-config PASS.
+- Production Django settings: deployment check exit 0; documented W005/W021
+  remain because HSTS intentionally excludes subdomains and preload.
+- Production-mode Gunicorn on an isolated Mac loopback port: HTTP 200 for
+  /, /login/, /api/v1/health, /assets/ui/translations.js,
+  /assets/landing/landing.css, /assets/brand/oxxom-oblik.svg.
+- Control socket explicitly disabled for the non-login systemd service user.
+- Synthetic configuration only; no local business database exported for QA.
+- Owned smoke-test Gunicorn process and workers stopped successfully.
+
+Not yet performed:
+- Git commit/push or repository creation; remote is still absent.
+- Target Ubuntu audit, package installation, systemd/nginx validation and reboot.
+- Actual PostgreSQL export/import and browser MFA login after migration.
+- Target DNS/TLS issuance and renewal verification.
+- Scheduled off-VM backups, notifications, isolated restore rehearsal and pilot.
+
+The runbook prepares an initial installation, not an automatic production update
+or database rollback. Restore refuses existing application database/role.

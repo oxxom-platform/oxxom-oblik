@@ -1,0 +1,34 @@
+Found 239 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+...............................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 239 tests in 56.739s
+
+OK
+Destroying test database for alias 'default'...
+No changes detected
+
+JavaScript regression checks: PASS
+- Document lookup and combined save/post workflow
+- Inventory lookup, inline creation and combined workflow
+- Operations workflow
+- Payment amounts, retries, allocations and inline accounts
+- Report filters, export, pagination and organization races
+- Import preview/confirm, duplicates, retries and errors
+- Issuer profile versions, read-only access and organization races
+- Document print links, saved version and dirty state
+
+Chrome proof on isolated temporary synthetic database: PASS
+- All 11 workspace routes render shared navigation with the selected org
+- Desktop (1440px) dashboard and mobile (390px) menu visually inspected
+- No document-level horizontal overflow on all 11 mobile routes
+- All four dashboard quick actions open forms and consume new=1
+- Cancellation of navigation preserves unsaved sale input
+- Acceptance navigates to the selected section
+- Organization switching changes context and role-specific menu
+- Viewer has no finance, import or team menu
+- Escape closes mobile menu and restores focus to toggle
+- Organization-details form and context link work after integration
+
+No user business data changed. No schema migrations in this block.

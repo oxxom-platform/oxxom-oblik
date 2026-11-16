@@ -1,0 +1,28 @@
+Found 245 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.....................................................................................................................................................................................................................................................
+----------------------------------------------------------------------
+Ran 245 tests in 49.413s
+
+OK
+Destroying test database for alias 'default'...
+No changes detected
+
+Real Chrome verification with isolated synthetic accounts/database: PASS
+- Wrong OTP remains on factor form; valid six-digit input opens /app/.
+- Multiple input/change events result in one verification request.
+- First-time setup displays a locally generated SVG QR, without a manual key line.
+- QR independently decoded by Chrome BarcodeDetector: expected issuer/account/secret.
+- Successful enrollment authenticates immediately and retains 10 recovery codes for saving.
+- QR source is cleared after success.
+- Pasting a 16-character recovery code selects recovery mode and submits once.
+- Successful recovery-code input redirects to /app/ automatically.
+- All three demo CTAs link to the normal personal /login/ route.
+- No autoplay control or automatic device switching on landing.
+- Numeric animation: 61 distinct numeric frames; device/badge max position delta 0px.
+- Screen opacity stays 1 throughout; no crossfade.
+- Repaired laptop deck overlaps lid at hinge with no detached front strip.
+- 360/390/768/1024/1440/1920px: no horizontal overflow, active screen masks.
+
+No real business records or user MFA devices changed. No schema migrations.

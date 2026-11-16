@@ -1,0 +1,162 @@
+{% load ui_i18n %}<!doctype html><html lang="{{ ui_language }}" data-ui-workspace><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{% ui_text "Продажі — OXXOM OBLIK" %}</title><style>:root{font:16px system-ui;color:#20362f;background:#f4f7f6}*{box-sizing:border-box}body{margin:0}header,main{max-width:1180px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}.logo{font-size:26px;font-weight:750}.logo span{color:#008973}a{color:#00765f}h1{font-size:30px;margin:0 0 20px}h2{font-size:21px}section{background:white;border:1px solid #dce6e0;border-radius:16px;padding:24px;margin:20px 0}label{display:block;margin:0 0 6px}input,select,textarea,button{font:inherit;border-radius:7px;padding:10px;border:1px solid #84998f}input,select,textarea{width:100%;background:white;color:inherit}textarea{min-height:90px;resize:vertical}button{background:#007c66;color:white;cursor:pointer}button.secondary{background:white;color:#20362f}button:disabled{opacity:.5;cursor:wait}.toolbar,.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.filters{display:grid;grid-template-columns:2fr 1fr auto;gap:16px;align-items:end}.actions{display:flex;gap:10px;flex-wrap:wrap}.table-wrap{overflow:auto}table{width:100%;text-align:left;border-collapse:collapse}td,th{padding:14px 10px;border-bottom:1px solid #e3eae6}th{color:#52675e;font-size:14px}.muted,small{color:#52675e}#message{white-space:pre-wrap;min-height:24px;font-weight:600}.pager{display:flex;gap:12px;align-items:center;margin-top:18px}[hidden]{display:none!important}:focus-visible{outline:3px solid #008973;outline-offset:3px}@media(max-width:640px){.toolbar,.grid,.filters{grid-template-columns:1fr}header,main{padding:18px}section{padding:16px}}
+ .line-product{min-width:220px}.line-value{min-width:110px}#sum{font-size:22px;font-weight:700;text-align:right}.line-actions{display:flex;gap:5px}textarea{min-height:80px}dialog{max-width:520px;width:calc(100% - 36px);border:1px solid #84998f;border-radius:16px;padding:24px;color:#20362f}dialog::backdrop{background:#20362f66}dialog label{margin-top:14px}.lookup-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0}#quick-message{white-space:pre-wrap;color:#a12222}[aria-disabled="true"]{opacity:.45;cursor:default;text-decoration:none}</style>{% include 'core/workspace-head.html' %}</head><body>{% include 'core/workspace-shell.html' %}<div hidden><nav><a href="/stock/">{% ui_text "Залишки та рухи" %}</a> · <a href="/app/">{% ui_text "Кабінет" %}</a> · <a id="catalog-link" href="/catalog/">{% ui_text "Довідники" %}</a></nav></div><main><h1>{% ui_text "Документи продажу" %}</h1><label for="organization">{% ui_text "Організація" %}</label><select id="organization" disabled></select><p id="message" role="status" aria-live="polite"></p>
+<section id="list" hidden><form id="filters" class="filters"><div><label for="search">{% ui_text "Контрагент або примітка" %}</label><input id="search" type="search" maxlength="100"></div><div><label for="state">{% ui_text "Стан" %}</label><select id="state"><option value="active">{% ui_text "Активні" %}</option><option value="archived">{% ui_text "Архівні" %}</option><option value="all">{% ui_text "Усі" %}</option></select></div><button class="secondary">{% ui_text "Знайти" %}</button></form><p class="muted">{% ui_text "Збережіть чернетку, потім відкрийте її для проведення. Проведення товарного продажу списує складський залишок; оплати ще не реалізовані." %}</p><button id="new">{% ui_text "Створити продаж" %}</button><div class="table-wrap"><table><thead><tr><th>{% ui_text "Номер / дата" %}</th><th>{% ui_text "Контрагент" %}</th><th>{% ui_text "Сума, грн" %}</th><th>{% ui_text "Стан" %}</th><th>{% ui_text "Дії" %}</th></tr></thead><tbody id="items"></tbody></table></div><div class="pager"><button id="prev" class="secondary">{% ui_text "Назад" %}</button><span id="page-number"></span><button id="next" class="secondary">{% ui_text "Далі" %}</button></div></section>
+<section id="editor" hidden><h2 id="title">{% ui_text "Нова чернетка" %}</h2><div id="print-actions" class="lookup-actions" hidden><a id="print-invoice" target="_blank" rel="noopener noreferrer">{% ui_text "Рахунок / PDF ↗" %}</a><a id="print-delivery" target="_blank" rel="noopener noreferrer">{% ui_text "Накладна / PDF ↗" %}</a><a id="print-act" target="_blank" rel="noopener noreferrer">{% ui_text "Акт послуг / PDF ↗" %}</a><a id="issuer-link" target="_blank" rel="noopener noreferrer">{% ui_text "Реквізити організації ↗" %}</a><small id="print-state"></small></div><p id="empty-hint" class="muted" hidden>{% ui_text "Спочатку додайте активного контрагента та товари/послуги в довідниках. Для продажу товару також потрібен склад." %}</p><form id="document-form">{% csrf_token %}<div class="grid"><div><label for="date">{% ui_text "Дата документа" %}</label><input id="date" type="date" required></div><div><label for="counterparty">{% ui_text "Контрагент" %}</label><select id="counterparty" required></select><p><button id="create-counterparty" type="button" class="secondary" hidden>{% ui_text "+ Додати контрагента" %}</button></p></div><div><label for="warehouse">{% ui_text "Склад (для товарів обов’язковий)" %}</label><select id="warehouse"></select><p><button id="create-warehouse" type="button" class="secondary" hidden>{% ui_text "+ Додати склад" %}</button></p></div><div><label for="note">{% ui_text "Примітка" %}</label><textarea id="note" maxlength="2000"></textarea></div></div><div class="lookup-actions"><button id="refresh-lookups" type="button" class="secondary">{% ui_text "Оновити списки" %}</button><a id="product-catalog-link" href="/catalog/" target="_blank" rel="noopener">{% ui_text "Додати товар або послугу в довіднику ↗" %}</a></div><h2>{% ui_text "Позиції зі списку" %}</h2><div class="table-wrap"><table><thead><tr><th>{% ui_text "Товар / послуга" %}</th><th>{% ui_text "Одиниця" %}</th><th>{% ui_text "Кількість" %}</th><th>{% ui_text "Ціна, грн" %}</th><th>{% ui_text "Сума, грн" %}</th><th>{% ui_text "Дії" %}</th></tr></thead><tbody id="lines"></tbody></table></div><p><button id="add-line" class="secondary" type="button">{% ui_text "Додати рядок" %}</button></p><p id="sum" aria-live="polite"></p><p class="muted">{% ui_text "Сума до збереження — попередній розрахунок. Сервер перевіряє рядки та обчислює остаточну суму. Продаж містить від 1 до 100 рядків." %}</p><p id="posting-state" role="status"></p><p id="document-feedback" role="status" aria-live="polite"></p><div class="actions"><a id="stock-result-link" href="/stock/" hidden>{% ui_text "Переглянути залишки та рухи →" %}</a><button id="post-document" type="submit" name="action" value="post" hidden>{% ui_text "Зберегти та провести" %}</button><button id="save" type="submit" name="action" value="draft">{% ui_text "Зберегти чернетку" %}</button><button id="reverse-document" type="button" class="secondary" hidden>{% ui_text "Сторнувати" %}</button><button id="close" type="button" class="secondary">{% ui_text "Закрити" %}</button></div></form></section>
+</main><dialog id="quick-create" aria-labelledby="quick-title"><h2 id="quick-title"></h2><p class="muted">{% ui_text "Запис збережеться в довіднику цієї організації та буде вибраний у продажі." %}</p><form id="quick-form"><label for="quick-name">{% ui_text "Назва або ПІБ" %}</label><input id="quick-name" name="name" maxlength="200" required><div id="quick-counterparty-fields"><label for="quick-kind">{% ui_text "Тип контрагента" %}</label><select id="quick-kind" name="kind"><option value="company">{% ui_text "Юридична особа" %}</option><option value="sole_trader">{% ui_text "ФОП" %}</option><option value="person">{% ui_text "Фізична особа" %}</option></select><label for="quick-code">{% ui_text "Код / ЄДРПОУ (необов’язково)" %}</label><input id="quick-code" name="code" maxlength="20"></div><p id="quick-message" role="status" aria-live="polite"></p><div class="actions"><button id="quick-save">{% ui_text "Додати та вибрати" %}</button><button id="quick-cancel" type="button" class="secondary">{% ui_text "Скасувати" %}</button></div></form></dialog><script>
+const el=id=>document.getElementById(id);
+let rights={read:false,write:false},documentData=null,rows=[],catalog={products:[],counterparties:[],warehouses:[]},page=1,generation=0,saving=false,catalogRights={write:[]},quickKind=null;
+const org=()=>el('organization').value;
+const base=()=>'/api/v1/organizations/'+org()+'/documents';
+const csrf=()=>document.cookie.split('; ').find(c=>c.startsWith('csrftoken='))?.split('=')[1];
+const editable=()=>rights.write&&(!documentData||(documentData.is_active&&documentData.status==='draft'));
+async function api(url,body){const options=body===undefined?{}:body instanceof FormData?{method:'POST',headers:{'X-CSRFToken':csrf()},body}:{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':csrf()},body:JSON.stringify(body)};const response=await fetch(url,options);if(response.status===401){location.href='/login/';throw Error(globalThis.OxxomUI.t("Увійдіть повторно."));}let data;try{data=await response.json();}catch{throw Error(globalThis.OxxomUI.t("Запит не виконано. Перевірте з’єднання та повторіть."));}if(!response.ok){const fields=data.fields?Object.values(data.fields).flat().map(e=>e.message).join(' '):'';const error=Error((data.error||globalThis.OxxomUI.t("Документ або дія недоступні."))+(fields?' '+fields:''));error.status=response.status;throw error;}return data;}
+function cell(row,node){const td=document.createElement('td');if(typeof node==='string')td.textContent=node;else td.append(node);row.append(td);return td;}
+function money(cents){return String(cents/100n)+'.'+String(cents%100n).padStart(2,'0');}
+function scaled(value,places){if(!/^\d+(\.\d+)?$/.test(value))return null;const [whole,part='']=value.split('.');if(part.length>places)return null;return BigInt(whole+part.padEnd(places,'0'));}
+function amount(row){const q=scaled(row.quantity,3),p=scaled(row.price,2);return q===null||p===null?null:(q*p+500n)/1000n;}
+function calculate(){let sum=0n,valid=true;rows.forEach((row,index)=>{const value=amount(row);const target=el('line-amount-'+index);if(target)target.textContent=value===null?'—':money(value);if(value===null)valid=false;else sum+=value;});el('sum').textContent=globalThis.OxxomUI.t("Разом: ")+(valid?money(sum)+globalThis.OxxomUI.t(" грн"):globalThis.OxxomUI.t("перевірте кількість і ціну"));postingState();}
+function renderLines(){el('lines').replaceChildren();rows.forEach((row,index)=>{const tr=document.createElement('tr');const choice=document.createElement('select');choice.className='line-product';choice.required=true;choice.setAttribute('aria-label',globalThis.OxxomUI.t("Позиція ")+(index+1));choice.add(new Option(globalThis.OxxomUI.t("Оберіть зі списку"),''));for(const product of catalog.products)choice.add(new Option(product.name,product.id));if(row.product){let option=Array.from(choice.options).find(o=>o.value===row.product);if(!option){option=new Option(row.name||globalThis.OxxomUI.t("Збережена позиція"),row.product);choice.add(option);}option.textContent=row.name||option.textContent;}choice.value=row.product;choice.disabled=!editable();const unit=document.createElement('span');unit.textContent=row.unit_symbol||'—';choice.onchange=()=>{const selected=catalog.products.find(p=>p.id===choice.value);row.product=choice.value;row.name=selected?.name||'';row.unit_symbol=selected?.unit_name||'';row.price=selected?.price||'';price.value=row.price;unit.textContent=row.unit_symbol||'—';calculate();};cell(tr,choice);cell(tr,unit);const quantity=document.createElement('input');quantity.type='number';quantity.min='0.001';quantity.max='999999999.999';quantity.step='0.001';quantity.required=true;quantity.className='line-value';quantity.setAttribute('aria-label',globalThis.OxxomUI.t("Кількість ")+(index+1));quantity.value=row.quantity;quantity.disabled=!editable();quantity.oninput=()=>{row.quantity=quantity.value;calculate();};cell(tr,quantity);const price=document.createElement('input');price.type='number';price.min='0';price.max='999999999999.99';price.step='0.01';price.required=true;price.className='line-value';price.setAttribute('aria-label',globalThis.OxxomUI.t("Ціна ")+(index+1));price.value=row.price;price.disabled=!editable();price.oninput=()=>{row.price=price.value;calculate();};cell(tr,price);const total=cell(tr,'');total.id='line-amount-'+index;const actions=document.createElement('div');actions.className='line-actions';if(editable()){for(const [text,delta] of [['↑',-1],['↓',1]]){const button=document.createElement('button');button.type='button';button.className='secondary';button.textContent=text;button.setAttribute('aria-label',(delta<0?globalThis.OxxomUI.t("Вище"):globalThis.OxxomUI.t("Нижче"))+globalThis.OxxomUI.t(" рядок ")+(index+1));button.disabled=index+delta<0||index+delta>=rows.length;button.onclick=()=>{[rows[index],rows[index+delta]]=[rows[index+delta],rows[index]];renderLines();};actions.append(button);}const remove=document.createElement('button');remove.type='button';remove.className='secondary';remove.textContent='×';remove.setAttribute('aria-label',globalThis.OxxomUI.t("Видалити рядок ")+(index+1));remove.onclick=()=>{rows.splice(index,1);renderLines();};actions.append(remove);}cell(tr,actions);el('lines').append(tr);});el('add-line').hidden=!editable();el('add-line').disabled=rows.length>=100;el('save').hidden=!editable();calculate();}
+function populate(id,items,value,label,savedLabel){const select=el(id);select.replaceChildren(new Option(id==='warehouse'?globalThis.OxxomUI.t("Без складу"):globalThis.OxxomUI.t("Оберіть зі списку"),''));for(const item of items)select.add(new Option(item[label],item.id));if(value){let option=Array.from(select.options).find(o=>o.value===value);if(!option){option=new Option(savedLabel||globalThis.OxxomUI.t("Збережений запис"),value);select.add(option);}if(savedLabel)option.textContent=savedLabel;}select.value=value||'';select.disabled=!editable();}
+async function loadCatalog(){const result={products:[],counterparties:[],warehouses:[]};if(!rights.write)return result;for(const kind of Object.keys(result)){let p=1,total=1;while(result[kind].length<total){const data=await api('/api/v1/organizations/'+org()+'/catalog/'+kind+'?page='+p++);result[kind].push(...data.items);total=data.total;if(!data.items.length)break;}}return result;}
+function closeEditor(){documentData=null;rows=[];el('editor').hidden=true;}
+async function openDocument(id=null,prefetched=null){const version=++generation;el('document-feedback').textContent=el('message').textContent='';const loaded=prefetched||(id?(await api(base()+'/'+id)).document:null);const options=prefetched?catalog:await loadCatalog();if(version!==generation)return;catalog=options;documentData=loaded;rows=loaded?loaded.lines.map(line=>({...line})):[];el('title').textContent=loaded?loaded.number+' · '+statusLabel(loaded):globalThis.OxxomUI.t("Нова чернетка");el('date').value=loaded?.date||new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Kyiv',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());el('date').disabled=!editable();el('note').value=loaded?.note||'';el('note').disabled=!editable();populate('counterparty',catalog.counterparties,loaded?.counterparty,'name',loaded?.counterparty_snapshot.name);populate('warehouse',catalog.warehouses,loaded?.warehouse,'name',loaded?.warehouse_name);el('editor').hidden=false;savedSignature=editorSignature();lookupState();renderLines();el('editor').scrollIntoView({behavior:'smooth'});}
+async function loadList(){const version=generation;const data=await api(base()+'?'+new URLSearchParams({page,status:el('state').value,q:el('search').value}));if(version!==generation)return;el('items').replaceChildren();for(const item of data.items){const row=document.createElement('tr');cell(row,item.number+' / '+item.date);cell(row,item.counterparty_snapshot.name);cell(row,item.total);cell(row,statusLabel(item));const actions=document.createElement('div');actions.className='actions';const open=document.createElement('button');open.className='secondary';open.textContent=globalThis.OxxomUI.t("Відкрити");open.onclick=()=>openDocument(item.id).catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);actions.append(open);if(rights.write){const copy=document.createElement('button');copy.className='secondary';copy.textContent=globalThis.OxxomUI.t("Копіювати");copy.onclick=()=>mutate(async()=>{const response=await api(base()+'/'+item.id+'/copy',{version:item.version});await openDocument(response.document.id);el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Створено нову копію чернетки.");});const archive=document.createElement('button');archive.className='secondary';archive.textContent=item.is_active?globalThis.OxxomUI.t("В архів"):globalThis.OxxomUI.t("Відновити");archive.onclick=()=>mutate(async()=>{await api(base()+'/'+item.id+'/state',{version:item.version,is_active:!item.is_active});closeEditor();el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Стан чернетки змінено.");});actions.append(copy);if(item.status==='draft')actions.append(archive);}cell(row,actions);el('items').append(row);}if(!data.items.length){const row=document.createElement('tr');cell(row,globalThis.OxxomUI.t("Документів не знайдено.")).colSpan=5;el('items').append(row);}el('page-number').textContent=globalThis.OxxomUI.t("Сторінка ")+page+globalThis.OxxomUI.t(" · Усього ")+data.total;el('prev').disabled=page<=1;el('next').disabled=page*50>=data.total;}
+function restoreControls(){el('organization').disabled=false;document.querySelectorAll('#filters input,#filters select,#filters button,#new,#close').forEach(n=>n.disabled=false);el('date').disabled=el('note').disabled=el('counterparty').disabled=el('warehouse').disabled=!editable();el('save').disabled=!editable();lookupState();renderLines();}
+async function mutate(action){if(saving)return;saving=true;el('document-feedback').textContent=el('message').textContent='';document.querySelectorAll('button,input,select,textarea').forEach(n=>n.disabled=true);try{await action();}catch(error){el('document-feedback').textContent=el('message').textContent=error.message;}finally{saving=false;restoreControls();await loadList().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);}}
+function lookupState(){
+    const messages=[];
+    if(!catalog.counterparties.length&&!el('counterparty').value)messages.push(globalThis.OxxomUI.t("Немає контрагентів. Натисніть «Додати контрагента» під списком або зверніться до власника."));
+    if(!catalog.products.length)messages.push(globalThis.OxxomUI.t("Немає активних товарів/послуг. Додайте їх у довіднику, потім натисніть «Оновити списки»."));
+    if(!catalog.warehouses.length&&!el('warehouse').value)messages.push(globalThis.OxxomUI.t("Для товарних рядків потрібен склад: його можна додати під списком складів."));
+    el('empty-hint').textContent=messages.join(' ');el('empty-hint').hidden=!editable()||!messages.length;
+    el('create-counterparty').hidden=!editable()||!catalogRights.write.includes('counterparties');
+    el('create-warehouse').hidden=!editable()||!catalogRights.write.includes('warehouses');
+    el('create-counterparty').disabled=el('create-warehouse').disabled=el('refresh-lookups').disabled=saving;
+    el('refresh-lookups').hidden=!editable();
+    el('product-catalog-link').hidden=!editable();
+    el('product-catalog-link').href='/catalog/?organization='+org()+'&kind=products';
+}
+async function refreshLookups(preferred={}){
+    const version=generation;
+    const counterparty=preferred.counterparty||el('counterparty').value;
+    const warehouse=preferred.warehouse||el('warehouse').value;
+    const counterpartyLabel=el('counterparty').selectedOptions[0]?.textContent;
+    const warehouseLabel=el('warehouse').selectedOptions[0]?.textContent;
+    const options=await loadCatalog();if(version!==generation)return;
+    catalog=options;
+    populate('counterparty',catalog.counterparties,counterparty,'name',documentData?.counterparty===counterparty?documentData.counterparty_snapshot.name:(catalog.counterparties.find(x=>x.id===counterparty)?.name||counterpartyLabel));
+    populate('warehouse',catalog.warehouses,warehouse,'name',documentData?.warehouse===warehouse?documentData.warehouse_name:(catalog.warehouses.find(x=>x.id===warehouse)?.name||warehouseLabel));
+    lookupState();renderLines();
+}
+function quickCreate(kind){
+    if(saving||!editable()||!catalogRights.write.includes(kind))return;
+    quickKind=kind;document.querySelectorAll('#quick-form input,#quick-form select,#quick-form button').forEach(node=>node.disabled=false);el('quick-form').reset();el('quick-message').textContent='';
+    el('quick-title').textContent=kind==='counterparties'?globalThis.OxxomUI.t("Новий контрагент"):globalThis.OxxomUI.t("Новий склад");
+    el('quick-counterparty-fields').hidden=kind!=='counterparties';
+    el('quick-kind').disabled=el('quick-code').disabled=kind!=='counterparties';
+    el('quick-create').showModal();el('quick-name').focus();
+}
+el('create-counterparty').onclick=()=>quickCreate('counterparties');
+el('create-warehouse').onclick=()=>quickCreate('warehouses');
+el('quick-cancel').onclick=()=>{if(!saving)el('quick-create').close();};
+el('quick-create').addEventListener('cancel',event=>{if(saving)event.preventDefault();});
+el('quick-form').onsubmit=async event=>{
+    event.preventDefault();if(saving||!quickKind)return;
+    const kind=quickKind,body=new FormData(el('quick-form'));
+    saving=true;el('quick-message').textContent='';
+    document.querySelectorAll('button,input,select,textarea').forEach(node=>node.disabled=true);
+    try{
+        const result=await api('/api/v1/organizations/'+org()+'/catalog/'+kind+'/add',body);
+        const item=result.item;
+        // Add the confirmed server record locally before refreshing other lookups.
+        // A failed refresh cannot cause a second creation or lose the selected UUID.
+        catalog[kind].push(item);
+        populate(kind==='counterparties'?'counterparty':'warehouse',catalog[kind],item.id,'name');
+        el('quick-create').close();
+        el('document-feedback').textContent=el('message').textContent=kind==='counterparties'?globalThis.OxxomUI.t("Контрагента додано та вибрано."):globalThis.OxxomUI.t("Склад додано та вибрано.");
+    }catch(error){el('quick-message').textContent=error.message;}
+    finally{
+        saving=false;document.querySelectorAll('#quick-form input,#quick-form select,#quick-form button').forEach(node=>node.disabled=false);
+        document.querySelectorAll('#list button').forEach(node=>node.disabled=false);
+        el('quick-kind').disabled=el('quick-code').disabled=quickKind!=='counterparties';
+        restoreControls();await loadList().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);
+    }
+};
+el('refresh-lookups').onclick=()=>mutate(async()=>{await refreshLookups();el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Списки оновлено. Введені рядки збережено.");});
+let savedSignature='';
+function printState(){
+    el('print-actions').hidden=!documentData;
+    el('issuer-link').href='/organization-details/?organization='+org();
+    const dirty=!!documentData&&editorSignature()!==savedSignature;
+    el('print-state').textContent=dirty?globalThis.OxxomUI.t("Перед друком збережіть зміни. Друкується тільки збережений документ."):'';
+    for(const [id,kind,lineKind] of [['print-invoice','invoice',null],['print-delivery','delivery','goods'],['print-act','act','service']]){
+        const link=el(id);link.hidden=!!lineKind&&(documentData?.status!=='posted'||!(documentData.lines||[]).some(line=>line.kind===lineKind));
+        link.href=documentData?'/print/'+org()+'/'+documentData.id+'/'+kind+'/?version='+documentData.version:'#';
+        link.setAttribute('aria-disabled',String(saving||dirty||!documentData));
+        link.onclick=event=>{if(saving||dirty||!documentData){event.preventDefault();displayAction(globalThis.OxxomUI.t("Збережіть зміни перед друком."));}};
+    }
+}
+
+const postingKeys=new Map();
+function editorSignature(){
+    return JSON.stringify({date:el('date').value,warehouse:el('warehouse').value,counterparty:el('counterparty').value,note:el('note').value,kind:false?el('stock-kind').value:null,
+        lines:rows.map(row=>({id:row.id||null,product:row.product,quantity:row.quantity,price:row.price||''}))});
+}
+function statusLabel(item){return item.is_active?({draft:globalThis.OxxomUI.t("Чернетка"),posted:globalThis.OxxomUI.t("Проведено"),reversed:globalThis.OxxomUI.t("Сторновано")}[item.status]||item.status):globalThis.OxxomUI.t("Архівна чернетка");}
+function postingState(){printState();el('stock-result-link').hidden=!documentData||!['posted','reversed'].includes(documentData.status);el('stock-result-link').href='/stock/?organization='+org();
+    const canPost=rights.post&&editable();el('save').className=rights.post?'secondary':'';
+    const dirty=!!documentData&&editorSignature()!==savedSignature;
+    el('post-document').hidden=!canPost;el('post-document').disabled=saving;
+    el('reverse-document').hidden=!(rights.post&&documentData?.status==='posted');el('reverse-document').disabled=saving;
+    el('posting-state').textContent=canPost&&dirty?globalThis.OxxomUI.t("Зміни буде збережено та проведено однією дією."):documentData?.status==='posted'?globalThis.OxxomUI.t("Документ проведено. Для виправлення спочатку сторнуйте його."):documentData?.status==='reversed'?globalThis.OxxomUI.t("Документ сторновано. Повторне проведення цього документа заборонено."):'';
+}
+async function applyPosting(operation){
+    if(saving||!rights.post||!documentData)return;
+    if(operation==='post'&&editorSignature()!==savedSignature){el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Спочатку збережіть зміни чернетки.");return;}
+    const id=documentData.id,version=documentData.version,key=id+':'+operation+':'+version;
+    if(!postingKeys.has(key))postingKeys.set(key,crypto.randomUUID());
+    const payload={version,idempotency_key:postingKeys.get(key)};
+    await mutate(async()=>{await api(base()+'/'+id+'/'+operation,payload);await openDocument(id);el('document-feedback').textContent=el('message').textContent=operation==='post'?globalThis.OxxomUI.t("Документ проведено. Залишки оновлено для товарних рядків."):globalThis.OxxomUI.t("Документ сторновано. Зворотні рухи записано в журнал.");});
+}
+
+el('reverse-document').onclick=()=>applyPosting('reverse');
+for(const id of ['date','counterparty','warehouse','note',...(false?['stock-kind']:[])]){
+    el(id).addEventListener('input',postingState);el(id).addEventListener('change',postingState);
+}
+
+function displayAction(text){el('document-feedback').textContent=el('message').textContent=text;}
+let combinedAttempt=null;
+async function submitSavedAction(payload,shouldPost){
+    if(shouldPost){
+        const route=base()+(documentData?'/'+documentData.id:'')+'/save-and-post';
+        const fingerprint=JSON.stringify(payload);
+        if(!combinedAttempt||combinedAttempt.route!==route||combinedAttempt.fingerprint!==fingerprint){
+            combinedAttempt={route,fingerprint,key:crypto.randomUUID()};
+        }
+        displayAction(globalThis.OxxomUI.t("Зберігаємо та проводимо документ…"));
+        let result;
+        try{result=await api(route,{document:payload,idempotency_key:combinedAttempt.key});}
+        catch(error){
+            if(error.status>=400&&error.status<500)throw Error(globalThis.OxxomUI.t("Документ не збережено та не проведено. ")+error.message);
+            throw Error(globalThis.OxxomUI.t("Не отримано підтвердження проведення. Повторіть дію з тими самими даними — повтор захищений від дублювання. ")+error.message);
+        }
+        await openDocument(result.document.id,result.document);
+        combinedAttempt=null;
+        displayAction(globalThis.OxxomUI.t("Документ збережено та проведено. Товарні залишки оновлено."));
+    }else{
+        displayAction(globalThis.OxxomUI.t("Зберігаємо чернетку…"));
+        const result=await api(base()+(documentData?'/'+documentData.id+'/save':'/add'),payload);
+        await openDocument(result.document.id,result.document);
+        displayAction(globalThis.OxxomUI.t("Чернетку ")+result.document.number+globalThis.OxxomUI.t(" збережено без зміни залишків. ")+(rights.post?globalThis.OxxomUI.t("Для товарних рухів натисніть «Зберегти та провести»."):globalThis.OxxomUI.t("Для проведення передайте документ власнику або бухгалтеру.")));
+    }
+}
+
+el('document-form').addEventListener('invalid',event=>{const control=event.target;const label=control.labels?.[0]?.textContent||control.getAttribute?.('aria-label')||globalThis.OxxomUI.t("поле документа");const state=control.validity;const reason=state?.valueMissing?globalThis.OxxomUI.t("Обов’язкове поле."):state?.stepMismatch?globalThis.OxxomUI.t("Перевірте точність числа."):state?.rangeUnderflow||state?.rangeOverflow?globalThis.OxxomUI.t("Значення поза допустимим діапазоном."):globalThis.OxxomUI.t("Перевірте введене значення.");displayAction(globalThis.OxxomUI.t("Перевірте «")+label.trim()+'»: '+reason);},true);
+el('document-form').onsubmit=async e=>{e.preventDefault();if(!editable()||saving)return;const payload={date:el('date').value,counterparty:el('counterparty').value,warehouse:el('warehouse').value||null,note:el('note').value,lines:rows.map(row=>({...(row.id?{id:row.id}:{}),product:row.product,quantity:row.quantity,price:row.price}))};if(documentData)payload.version=documentData.version;await mutate(async()=>{await submitSavedAction(payload,!!rights.post&&e.submitter?.value==='post');});};
+el('add-line').onclick=()=>{if(rows.length<100){rows.push({product:'',quantity:'1',price:'',unit_symbol:''});renderLines();}};el('close').onclick=closeEditor;el('new').onclick=()=>openDocument().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);
+async function selectOrg(){const version=++generation;closeEditor();el('list').hidden=true;el('document-feedback').textContent=el('message').textContent='';page=1;el('catalog-link').href='/catalog/?organization='+org();const granted=await api('/api/v1/organizations/'+org()+'/document-permissions');if(version!==generation)return;rights=granted;catalogRights=rights.write?await api('/api/v1/organizations/'+org()+'/catalog-permissions'):{write:[]};if(version!==generation)return;if(!rights.read){el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Ваша роль не має доступу до продажів.");return;}el('list').hidden=false;el('new').hidden=!rights.write;await loadList();}
+el('organization').onchange=()=>selectOrg().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);el('filters').onsubmit=e=>{e.preventDefault();page=1;loadList().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);};el('prev').onclick=()=>{page--;loadList().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);};el('next').onclick=()=>{page++;loadList().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);};
+async function init(){const data=await api('/api/v1/organizations');for(const item of data.organizations)el('organization').add(new Option(item.name,item.id));const requested=new URLSearchParams(location.search).get('organization');if(data.organizations.some(o=>o.id===requested))el('organization').value=requested;if(data.organizations.length){el('organization').disabled=false;await selectOrg();if(new URLSearchParams(location.search).get('new')==='1'&&rights.write){const url=new URL(location.href);url.searchParams.delete('new');window.history.replaceState(null,'',url);await openDocument();}}else el('document-feedback').textContent=el('message').textContent=globalThis.OxxomUI.t("Немає доступних організацій.");}
+globalThis.OxxomWorkspace?.registerGuard(()=>saving||!el('editor').hidden&&editable()&&editorSignature()!==savedSignature);
+init().catch(error=>el('document-feedback').textContent=el('message').textContent=error.message);
+</script></body></html>

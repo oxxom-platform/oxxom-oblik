@@ -1,0 +1,23 @@
+Found 63 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+...............................................................
+----------------------------------------------------------------------
+Ran 63 tests in 64.775s
+
+OK
+Destroying test database for alias 'default'...
+No changes detected
+
+Browser QA: real Chrome, isolated local server with empty in-memory database.
+- Public root returns HTTP 200.
+- Original SVG logo loads correctly.
+- Desktop and mobile composition visually inspected.
+- Widths 320, 390, 768, 1024 and 1440: no horizontal overflow.
+- Mobile navigation opens; Escape closes and returns focus.
+- FAQ opens and displays answers.
+- Workspace /app/ redirects anonymous visitors to /login/.
+- No JavaScript exceptions.
+- Final mobile typography and repeated original logo checked.
+
+This run covers core/accounts. No business data or migrations changed.

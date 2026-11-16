@@ -1,0 +1,23 @@
+Found 6 test(s).
+System check identified no issues (0 silenced).
+......
+----------------------------------------------------------------------
+Ran 6 tests in 2.082s
+
+OK
+
+Real Chrome verification, isolated public preview: PASS
+- Reference hero inspected against the image embedded in OBLIK_TZ.docx.
+- Five states: overview, finance, stock, documents, analytics.
+- Laptop and both phones show the same state and primary metric.
+- Autoplay advances after its pause; explicit pause preserves the state.
+- Reduced motion disables autoplay, keeps manual controls and stable values.
+- ArrowRight activates the next tab.
+- Section reveal observer shows blocks during normal scrolling.
+- 360/375/390/430/768/1024/1280/1440/1920px: no horizontal overflow.
+- Laptop base and phone remain within the viewport at all checked widths.
+- All display containers keep overflow hidden and paint containment.
+- Original brand remains an SVG resource in every scene.
+- Desktop/mobile composition visually inspected; no JavaScript exceptions.
+
+No production publication, business records, or schema changes.

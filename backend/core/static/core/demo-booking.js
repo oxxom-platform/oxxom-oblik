@@ -2,6 +2,17 @@
  'use strict';
  const form=document.getElementById('booking-form');
  if(!form)return;
+ const hero=document.querySelector('.booking-hero');
+ if(hero){
+  const cue=document.createElement('a');cue.className='booking-form-cue';cue.href='#booking-form';
+  cue.setAttribute('aria-label',document.getElementById('booking-form-title').textContent.trim());
+  cue.innerHTML='<svg viewBox="0 0 32 56" width="28" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 5v39M7 35l9 9 9-9"/></svg>';
+  hero.appendChild(cue);
+  cue.addEventListener('click',event=>{
+   event.preventDefault();form.setAttribute('tabindex','-1');form.focus({preventScroll:true});
+   form.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+ }
  const mobile=document.querySelector('.mobile-nav');
  if(mobile){
   const summary=mobile.querySelector('summary');summary.setAttribute('aria-expanded','false');

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="{{ language }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light">
+  <title>{{ status }} · {{ title }} — OXXOM OBLIK</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,{{ icon }}">
+  <style>{{ css|safe }}</style>
+</head>
+<body>
+  <header><a href="{{ home }}" aria-label="OXXOM OBLIK"><img src="data:image/png;base64,{{ logo }}" width="300" height="42" alt="OXXOM OBLIK"></a><span class="product">{{ common.product }}</span></header>
+  <main>
+    <section class="error-card" aria-labelledby="error-title">
+      <div class="status-line"><span class="status-dot" aria-hidden="true"></span>{{ common.label }}<span class="reference">HTTP {{ status }}</span></div>
+      <div class="card-content">
+        <div class="document" aria-hidden="true"><div class="document-fold"></div><span class="number">{{ status }}</span><span class="rule"></span><span class="rule short"></span><span class="document-seal">×</span></div>
+        <div class="message"><p class="eyebrow">OXXOM OBLIK / {{ status }}</p><h1 id="error-title">{{ title }}</h1><p class="description">{{ description }}</p>
+          <nav aria-label="{{ common.actions }}"><a class="primary" href="{{ home }}">{{ common.home }} <span aria-hidden="true">↗</span></a><a class="secondary" href="/app/">{{ common.workspace }}</a></nav>
+        </div>
+      </div>
+      <footer><span class="footer-mark" aria-hidden="true">↳</span><p>{{ common.help }}</p><span class="footer-brand">OBLIK</span></footer>
+    </section>
+    <p class="signature">{{ common.signature }}</p>
+  </main>
+</body>
+</html>

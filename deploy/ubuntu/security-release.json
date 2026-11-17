@@ -1,0 +1,49 @@
+{
+  "release": "SECURITY-01A",
+  "files": {
+    "backend/accounts/auth_views.py": {
+      "before": "7dc67fd6a470831c40b473329954b370725056aced962ad13c27e125999ce097",
+      "after": "3c0161dd9968adb9811ff93b1b7026e09787e2c2e5d77682b3b849b67f5fba09"
+    },
+    "backend/accounts/client_address.py": {
+      "before": null,
+      "after": "7db50713680daa9fe616d953db690bfc1541c2acba83f18a23a8b9a38c3968c5"
+    },
+    "backend/config/settings.py": {
+      "before": "e9fbc107b3f9fed885ceb577e7ee7196c235e98580a3c53fbcb8ad66592a48d0",
+      "after": "c18a567c3353dcd9810d043c4025784d2a40944d918410c7fa24638d2fcff6e7"
+    },
+    "backend/config/urls.py": {
+      "before": "873769ac397526239a97fa353c65c3e9ec7fe08c2474ae5a37ad997e4c7f0ce1",
+      "after": "03a0cdcabab3d67ccabcf1209eb3fb7e97397d239f0eff7f9f04328ab9013f75"
+    },
+    "backend/core/errors.py": {
+      "before": null,
+      "after": "a5d9244e098b2a6d75aa1ade3b4c7908b230d633a628b89617c009872bcb9d33"
+    },
+    "backend/core/locale_middleware.py": {
+      "before": "0bfbec75d1f180febf427bfb4ae6da335c47d21f3938cca14e2749dea23e5ff2",
+      "after": "54abf591c96653e4b0941aa0d2ec12da3f9bdd6d351a19287b50cafb1843add8"
+    },
+    "backend/core/locale/errors.json": {
+      "before": null,
+      "after": "67785751f66aa063219e26cef015bed12f122ad331bb25f79b25e8c651b92df9"
+    },
+    "backend/core/static/core/errors.css": {
+      "before": null,
+      "after": "e26f1d30f78fa8d668da1681c3352fac396d8cabfeea3bacac52d03200d36b41"
+    },
+    "backend/core/templates/core/error.html": {
+      "before": null,
+      "after": "2bd0611b0de4335ce9c9caf0fc71eb4ede31b93fdc7828ee945401468c814ac2"
+    },
+    "backend/core/management/commands/build_error_pages.py": {
+      "before": null,
+      "after": "96e0d442bccdf6923f6919cb06872c7327cbf111d55bc7ceadab3905a049fe58"
+    },
+    "deploy/ubuntu/collect-security.py": {
+      "before": null,
+      "after": "f201bdc63226f5751d4d4ff685a9082f631dc52377fa53c43ef896060dfab6c8"
+    }
+  }
+}

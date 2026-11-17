@@ -17,6 +17,7 @@ from django.views.decorators.http import require_POST, require_GET
 from .access import memberships_for
 from .models import User, TOTPDevice, AuthThrottle
 from .mfa import encrypt, decrypt, consume_totp, consume_recovery, recovery_codes, provisioning_qr
+from .client_address import validated_auth_source
 
 
 def has_mfa_session(request, now):
@@ -40,17 +41,20 @@ def protected(view):
 
 
 def throttle_rows(request, identity):
-    # Trust only REMOTE_ADDR; forwarded headers require a separately reviewed proxy policy.
-    keys = ["account:" + identity, "source:" + request.META.get("REMOTE_ADDR", "unknown")]
+    # Lock the client first: blocked sources cannot allocate unlimited account
+    # rows. A new namespace retires old counters keyed by the shared proxy IP.
+    keys = ["client-v2:" + request.auth_client_address, "account:" + identity]
     records = []
     now = time.time()
-    for key in sorted(salted_hmac("auth-throttle", key).hexdigest() for key in keys):
+    for key in (salted_hmac("auth-throttle", key).hexdigest() for key in keys):
         record, _ = AuthThrottle.objects.get_or_create(key=key)
         record = AuthThrottle.objects.select_for_update().get(pk=record.pk)
         if now - record.window_started >= 900:
             record.window_started = now
             record.failures = 0
         records.append(record)
+        if record.failures >= 5:
+            break
     return records
 
 
@@ -89,6 +93,7 @@ def login_script(request):
 
 @never_cache
 @require_POST
+@validated_auth_source
 @sensitive_post_parameters()
 @sensitive_variables()
 def password_login(request):
@@ -126,6 +131,7 @@ def pending_user(request):
 
 @never_cache
 @require_POST
+@validated_auth_source
 @sensitive_post_parameters()
 @sensitive_variables()
 def setup(request):
@@ -148,6 +154,7 @@ def setup(request):
 
 @never_cache
 @require_POST
+@validated_auth_source
 @sensitive_post_parameters()
 @sensitive_variables()
 def verify(request):
@@ -199,6 +206,7 @@ def sign_out(request):
 
 @require_POST
 @protected
+@validated_auth_source
 @sensitive_post_parameters()
 def regenerate_recovery(request):
     if not settings.OXXOM_MFA_KEY:

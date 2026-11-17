@@ -34,6 +34,8 @@
 global test throttle. Міграція не змінює існуючі бізнес-таблиці.
 Підписаний UUID-ticket живе одну годину; повтор того самого ticket повертає
 попередній receipt і не створює повторний mail job. CSRF/Origin обов’язкові.
+До CSRF-розбору API допускає лише URL-encoded POST з Content-Length до 4096
+байтів; multipart/file uploads та завеликі запити відхиляються без парсингу.
 Сторінки працюють без запитів до БД; API має мінімальну публічну дію без доступу
 до користувачів, організацій чи фінансових записів.
 
@@ -85,8 +87,8 @@ Job захищається PostgreSQL row lock/lease, Message-ID стабіль�
 [CI 44152691399](https://github.com/oxxom-platform/oxxom-oblik/actions/runs/44152691399).
 `makemigrations --check --dry-run`: No changes detected. Окремо 6 updater tests
 PASS, а існуюча перевірка error responses/Nginx також PASS.
-Опублікований pinned archive додатково перевірено: 21 runtime-файл і guard hash
-відповідають manifest. Фінальна поведінка mobile menu: open/close, aria-expanded, Escape і повернення фокусу — PASS у Chromium.
+Попередній pinned archive перевірено до фінального body-limit guard;
+фінальний archive повторно перевіряється перед командою встановлення. Фінальна поведінка mobile menu: open/close, aria-expanded, Escape і повернення фокусу — PASS у Chromium.
 
 - Синтетичні дані, підроблені поля, CSRF/Origin, honeypot, ticket/expiry,
   idempotency, глобальний throttle, місткість та атомарність request/outbox.
@@ -104,7 +106,7 @@ PASS, а існуюча перевірка error responses/Nginx також PASS
 ## Випуск на Ubuntu
 
 `deploy/ubuntu/update-demo.sh ПОВНИЙ_SHA` завантажує конкретний переглянутий
-реліз. Installer дозволяє 21 runtime-файл, перевіряє baseline восьми існуючих
+реліз. Installer дозволяє 22 runtime-файл, перевіряє baseline восьми існуючих
 файлів SECURITY-01A та SHA256 нових. Невідома серверна правка зупиняє оновлення.
 Механізм файлового rollback повторно використовує checksum-pinned guard
 попереднього випуску; довільний код з архіву не імпортується.

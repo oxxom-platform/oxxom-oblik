@@ -12,7 +12,7 @@ CSRF_TRUSTED_ORIGINS = CONFIG["origins"]
 DATABASES = {"default": CONFIG["database"]}
 INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports", "demo_booking"]
 MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "core.errors.ErrorPageMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
-              "core.locale_middleware.InterfaceLanguageMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
+              "core.locale_middleware.InterfaceLanguageMiddleware", "demo_booking.middleware.DemoBodyLimitMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
               "django.contrib.auth.middleware.AuthenticationMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"

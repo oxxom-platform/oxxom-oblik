@@ -3,7 +3,7 @@
   "files": {
     "backend/config/settings.py": {
       "before": "c18a567c3353dcd9810d043c4025784d2a40944d918410c7fa24638d2fcff6e7",
-      "after": "dec9e96bb86cbe281226055aadc0f3c994d6e1240a6e0e9037c757bd3c14b0f3"
+      "after": "2656ef0097a392c974f2659d47909df6857d61e1fd248c98d0a12f7d51a95677"
     },
     "backend/config/urls.py": {
       "before": "03a0cdcabab3d67ccabcf1209eb3fb7e97397d239f0eff7f9f04328ab9013f75",
@@ -83,7 +83,11 @@
     },
     "backend/core/static/core/demo-booking.js": {
       "before": null,
-      "after": "df5604b2783e3ebf98104c5a5f475a0c4137642935da32e8b55b596b6ce46267"
+      "after": "add34c3e11cfba428bdd3add6e86e3f71ff46fb79b5bf936263cca29cda35ba1"
+    },
+    "backend/demo_booking/middleware.py": {
+      "before": null,
+      "after": "6d418356713701a20dba83991a39f609816b3489fca5eb40029b06352fc0db06"
     }
   }
 }

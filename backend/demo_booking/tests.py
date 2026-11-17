@@ -6,6 +6,7 @@ import re
 import smtplib
 from unittest.mock import patch
 from uuid import uuid4
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core import signing
@@ -67,13 +68,18 @@ class BookingPageTests(SimpleTestCase):
 class BookingSubmissionTests(TestCase):
     url = '/api/public/demo-requests'
 
+    def post(self, payload, client=None, **extra):
+        return (client or self.client).post(
+            self.url, urlencode(payload),
+            content_type='application/x-www-form-urlencoded', **extra)
+
     def test_submission_ignores_all_visitor_data_and_is_idempotent(self):
         ticket = new_ticket()
         payload = {'ticket':ticket, 'email':'PRIVATE_CONTACT@example.com', 'company':'PRIVATE_COMPANY',
                    'comment':'PRIVATE_COMMENT<script>alert(1)</script>', 'phone':'+12345678900',
                    'product':'oxxom-hub', 'privacy_consent':'yes'}
-        first = self.client.post(self.url, payload)
-        second = self.client.post(self.url, payload)
+        first = self.post(payload)
+        second = self.post(payload)
         self.assertEqual(first.status_code, 200)
         self.assertEqual(first.json(), second.json())
         lead = DemoRequest.objects.get()
@@ -87,36 +93,50 @@ class BookingSubmissionTests(TestCase):
 
     def test_csrf_is_required_and_normal_token_succeeds(self):
         client = Client(enforce_csrf_checks=True)
-        self.assertEqual(client.post(self.url, {'ticket':new_ticket()}).status_code, 403)
+        self.assertEqual(self.post({'ticket':new_ticket()}, client=client).status_code, 403)
         page = client.get('/demo/')
         token = client.cookies['csrftoken'].value
         ticket = re.search(rb'name="ticket" value="([^"]+)"', page.content).group(1).decode()
-        response = client.post(self.url, {'ticket':ticket}, HTTP_X_CSRFTOKEN=token)
+        response = self.post({'ticket':ticket}, client=client, HTTP_X_CSRFTOKEN=token)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(client.post(self.url, {'ticket':new_ticket()}, HTTP_X_CSRFTOKEN=token,
+        self.assertEqual(self.post({'ticket':new_ticket()}, client=client, HTTP_X_CSRFTOKEN=token,
                                      HTTP_ORIGIN='https://attacker.invalid').status_code, 403)
 
     def test_bad_expired_ticket_and_honeypot_do_not_create_mail_or_lead(self):
         for payload in [{'ticket':'bad'}, {'ticket':'a'*513}, {'ticket':new_ticket(),'website':'spam'}]:
-            self.assertEqual(self.client.post(self.url, payload).status_code, 400)
+            self.assertEqual(self.post(payload).status_code, 400)
         with patch('django.core.signing.time.time', return_value=0):
             expired = new_ticket()
-        self.assertEqual(self.client.post(self.url, {'ticket':expired}).status_code, 400)
+        self.assertEqual(self.post({'ticket':expired}).status_code, 400)
         self.assertFalse(DemoRequest.objects.exists())
         self.assertFalse(DemoMail.objects.exists())
 
     def test_limit_is_global_without_storing_client_metadata_and_keeps_old_receipts(self):
         first_ticket = new_ticket()
-        first = self.client.post(self.url, {'ticket':first_ticket})
+        first = self.post({'ticket':first_ticket})
         for i in range(19):
-            self.assertEqual(self.client.post(self.url, {'ticket':new_ticket()}, REMOTE_ADDR=f'198.51.100.{i}').status_code, 200)
-        limited = self.client.post(self.url, {'ticket':new_ticket()})
+            self.assertEqual(self.post({'ticket':new_ticket()}, REMOTE_ADDR=f'198.51.100.{i}').status_code, 200)
+        limited = self.post({'ticket':new_ticket()})
         self.assertEqual(limited.status_code, 429)
         self.assertEqual(limited['Retry-After'], '60')
-        self.assertEqual(self.client.post(self.url, {'ticket':first_ticket}).json(), first.json())
+        self.assertEqual(self.post({'ticket':first_ticket}).json(), first.json())
         self.assertEqual(list(DemoThrottle.objects.values_list('key', flat=True)), ['public-tests'])
         DemoThrottle.objects.update(started=timezone.now()-timedelta(minutes=2))
-        self.assertEqual(self.client.post(self.url, {'ticket':new_ticket()}).status_code, 200)
+        self.assertEqual(self.post({'ticket':new_ticket()}).status_code, 200)
+
+    def test_uploads_and_oversized_bodies_are_rejected_before_csrf_parsing(self):
+        client = Client(enforce_csrf_checks=True)
+        with patch('django.http.request.HttpRequest._load_post_and_files',
+                   side_effect=AssertionError('Request parsed too early')) as parse:
+            response = client.post(self.url, {'ticket':new_ticket()})
+            self.assertEqual(response.status_code, 415)
+            self.assertEqual(response.json()['error'], 'unsupported_media_type')
+            response = self.post({'ticket':new_ticket(), 'extra':'x'*5000}, client=client)
+            self.assertEqual(response.status_code, 413)
+            self.assertEqual(response.json()['error'], 'payload_too_large')
+            parse.assert_not_called()
+        self.assertFalse(DemoRequest.objects.exists())
+        self.assertFalse(DemoMail.objects.exists())
 
     def test_atomic_queue_failure_rolls_back_lead(self):
         with patch('demo_booking.services.DemoMail.objects.create', side_effect=RuntimeError('test failure')):
@@ -126,7 +146,7 @@ class BookingSubmissionTests(TestCase):
 
     def test_capacity_stops_before_writing_and_does_not_delete_delivery_evidence(self):
         with patch('demo_booking.services.DemoRequest.objects.count', return_value=500):
-            response = self.client.post(self.url, {'ticket':new_ticket()})
+            response = self.post({'ticket':new_ticket()})
         self.assertEqual(response.status_code, 503)
         self.assertEqual(DemoRequest.objects.count(), 0)
 

@@ -22,7 +22,7 @@
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
   try{
    const body=new FormData(form);
-   const response=await fetch(form.action,{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRFToken':body.get('csrfmiddlewaretoken'),'Accept':'application/json'},body});
+   const response=await fetch(form.action,{method:'POST',credentials:'same-origin',signal:controller.signal,headers:{'X-CSRFToken':body.get('csrfmiddlewaretoken'),'Accept':'application/json'},body:new URLSearchParams(body)});
    const result=await response.json();
    if(!response.ok){show(response.status===429?messages.limited:(result.error==='expired_ticket'?messages.expired:messages.failure),true);return;}
    if(result.status!=='test_received'||!/^[-a-f0-9]{36}$/.test(result.id))throw Error('Unexpected response');

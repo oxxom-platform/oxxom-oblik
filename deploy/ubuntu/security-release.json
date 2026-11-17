@@ -39,7 +39,7 @@
     },
     "backend/core/management/commands/build_error_pages.py": {
       "before": null,
-      "after": "96e0d442bccdf6923f6919cb06872c7327cbf111d55bc7ceadab3905a049fe58"
+      "after": "90a20cc6fb69182ab3f4917a6d3f1cb2fa51d01c397cac199577721e65b2fb04"
     },
     "deploy/ubuntu/collect-security.py": {
       "before": null,

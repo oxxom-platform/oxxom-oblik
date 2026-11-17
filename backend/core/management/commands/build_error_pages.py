@@ -13,18 +13,14 @@ def proxy_config():
         '# OBLIK virtual host only. Install pages at /data/oxxom-oblik-errors.',
         '# Do not enable proxy_intercept_errors: preserve application API responses.',
         'set $oblik_error_language uk;',
+        'set $oblik_error_format html;',
+        'if ($request_uri ~ "^/api/") { set $oblik_error_format json; }',
         'if ($cookie_oxxom_language ~ "^(en|ru|cs)$") { set $oblik_error_language $cookie_oxxom_language; }',
     ]
     for code in ('uk', 'en', 'ru', 'cs'):
         lines.append(f'if ($request_uri ~ "^/{code}/") {{ set $oblik_error_language {code}; }}')
     for status in (429, 502, 503, 504):
-        lines += [
-            f'error_page {status} /__oblik_errors/{status}.html;',
-            f'location = /__oblik_errors/{status}.html {{',
-            '    internal;',
-            '    default_type application/json;',
-            '    types { text/html html; }',
-            f'    alias /data/oxxom-oblik-errors/{status}-$oblik_error_language.html;',
+        headers = [
             '    add_header Cache-Control "no-store, private" always;',
             '    add_header X-Robots-Tag "noindex, nofollow" always;',
             '    add_header X-Content-Type-Options nosniff always;',
@@ -35,11 +31,22 @@ def proxy_config():
             f'    add_header Content-Security-Policy "{csp}" always;',
         ]
         if status in (429, 503):
-            lines.append(f'    add_header Retry-After {900 if status == 429 else 60} always;')
+            headers.append(f'    add_header Retry-After {900 if status == 429 else 60} always;')
         lines += [
-            '    if ($request_uri ~ "^/api/") {',
-            f'        return {status} \'{{"error":"{ERROR_CODES[status]}"}}\';',
-            '    }',
+            f'error_page {status} /__oblik_errors/{status}.$oblik_error_format;',
+            f'location = /__oblik_errors/{status}.html {{',
+            '    internal;',
+            '    default_type text/html;',
+            '    types { text/html html; }',
+            f'    alias /data/oxxom-oblik-errors/{status}-$oblik_error_language.html;',
+            *headers,
+            '}',
+            f'location = /__oblik_errors/{status}.json {{',
+            '    internal;',
+            '    types { application/json json; }',
+            '    default_type application/json;',
+            *headers,
+            f'    return {status} \'{{"error":"{ERROR_CODES[status]}"}}\';',
             '}',
         ]
     return '\n'.join(lines) + '\n'

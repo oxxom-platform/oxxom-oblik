@@ -153,12 +153,13 @@ class PublicSEOTests(SimpleTestCase):
                 icons = [link for link in PublicPage(markup).links if link.get('rel') == 'icon']
                 self.assertEqual(len(icons), 1)
                 self.assertTrue(icons[0]['href'].startswith('/assets/brand/favicon-oblik.png?'))
+                self.assertNotIn('rel="shortcut icon"', markup)
                 self.assertIn('apple-touch-icon', markup)
         icon = self.client.get('/favicon.ico')
         data = b''.join(icon.streaming_content)
         self.assertEqual(icon.status_code, 200)
         self.assertEqual(icon['Content-Type'], 'image/x-icon')
-        self.assertEqual(data[:6], b'\x00\x00\x01\x00\x04\x00')
+        self.assertEqual(data[:6], b'\x00\x00\x01\x00\x01\x00')
         self.assertNotIn('X-Robots-Tag', icon)
         for name, dimensions in [('favicon-oblik.png', (256, 256)), ('apple-touch-oblik.png', (180, 180))]:
             response = self.client.get('/assets/brand/' + name)

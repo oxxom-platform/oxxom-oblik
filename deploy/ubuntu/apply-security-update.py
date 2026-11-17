@@ -29,6 +29,10 @@ PAYLOAD_FILES = {
 }
 
 
+class PreflightError(ValueError):
+    """Controlled diagnostic containing only public file paths or policy text."""
+
+
 def sha(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -85,7 +89,7 @@ def verify_baseline(root, manifest, payload):
         original = path.read_bytes() if path.exists() else None
         digest = sha(original) if original is not None else None
         if digest not in (manifest['files'][name]['before'], sha(data)):
-            raise ValueError('Unreviewed server change: ' + name)
+            raise PreflightError('Unreviewed server change; application unchanged: ' + name)
         originals[name] = original
     return originals
 
@@ -183,7 +187,10 @@ def main():
         values = read_env(env_path)
         if values.get('APP_ENV') != 'production':
             raise ValueError('Review production configuration before this update')
-        proxy = ip_address(values.get('OXXOM_PROXY_IP', ''))
+        try:
+            proxy = ip_address(values.get('OXXOM_PROXY_IP', ''))
+        except ValueError:
+            raise PreflightError('Configure one exact OXXOM_PROXY_IP before updating; values omitted') from None
         if proxy.is_unspecified or proxy.is_multicast:
             raise ValueError('An exact trusted proxy peer is required before this update')
         smoke(updated=False)
@@ -231,5 +238,8 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as error:
-        print('STOP: ' + type(error).__name__ + '; review the protected recovery log; secret values omitted', file=sys.stderr)
+        if isinstance(error, PreflightError):
+            print('STOP: ' + str(error), file=sys.stderr)
+        else:
+            print('STOP: ' + type(error).__name__ + '; secret values omitted. If a recovery directory was printed, review its checks.log. Otherwise preflight did not complete.', file=sys.stderr)
         sys.exit(1)

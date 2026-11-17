@@ -33,12 +33,14 @@ HTTPS-схема и REMOTE_ADDR глобально не переписывают
 | Сессии/MFA | TOTP replay/concurrency, recovery, отзыв, абсолютные семь дней | PASS в полном наборе |
 | Ошибки | Handler, JSON/CSRF, no-store/noindex, CSP, исключения без данных | PASS в полном наборе; дополнительный тест генератора отдельно |
 | Интерфейс | Четыре языка и четыре ширины, утверждённый логотип | PASS в изолированном Chromium |
-| Ubuntu updater | Неизвестный baseline, symlink, checksum, allowlist, rollback/new files | Отдельный тестовый набор |
+| Ubuntu updater | Неизвестный baseline, symlink, checksum, allowlist, rollback/new files | 6 tests PASS на macOS и Ubuntu CI |
+| Nginx, изолированная Ubuntu | Настоящий Nginx, корректный MIME HTML/JSON, статусы, GET/POST, языки, upstream failure | 53 HTTP assertions PASS; [CI](https://github.com/oxxom-platform/oxxom-oblik/actions/runs/44134647618) |
 | Внешний Nginx | Фактическая установка include и HTTP-проверка на proxy host | NOT TESTED на production |
 | Production auth | Фактические forwarded headers доверенного peer | NOT TESTED; не атаковали рабочие аккаунты |
 
 Полный набор выполнен до добавления дополнительного теста генератора и изменения
 расширения internal Nginx URI; затем затронутый набор проверяется отдельно.
+Финальный focused-набор ошибок: 8 tests PASS в Ubuntu CI.
 Предыдущий SQLite-эксперимент остаётся историческим доказательством F-01;
 исправление проверялось с настоящими PostgreSQL row locks.
 
@@ -74,3 +76,9 @@ unit/env-файлы не выводятся. Сборщик не исправл�
 автоматическое расписание и проверенные email-уведомления бэкапа, независимая
 immutable/offline копия и повторная проверка на production. Пройденные
 функциональные тесты не подменяют эти доказательства.
+
+Git metadata-проверка staged list остановилась по тайм-ауту; она не объявлена
+успешной. Дополнительно проверены точные опубликованные blobs 23 исходных
+файлов пакета: соответствие содержимому, отсутствие private paths, известных
+локальных credentials и private-key headers. Полная история Git и неизвестные
+исторические credentials этой проверкой не покрываются.

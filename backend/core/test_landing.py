@@ -36,7 +36,7 @@ class LandingTests(SimpleTestCase):
             if href.startswith('#'):
                 self.assertIn(href[1:], parser.ids)
             else:
-                self.assertIn(href, ('/', '/en/', '/ru/', '/cs/', '/login/'))
+                self.assertIn(href, ('/', '/en/', '/ru/', '/cs/', '/login/', '/demo/', 'mailto:info@oxxom.com.ua'))
                 self.assertFalse(urlsplit(href).netloc)
         self.assertEqual(self.client.post('/').status_code, 405)
 

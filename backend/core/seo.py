@@ -25,6 +25,7 @@ LANGUAGES = {
            'description': 'Evidence zboží, služeb, skladových zásob, prodejních dokladů a plateb na jednom místě. OXXOM OBLIK pomáhá uspořádat každodenní chod firmy.'},
 }
 PUBLIC_PATHS = {item['path']: code for code, item in LANGUAGES.items()}
+PUBLIC_PATHS.update({item['path'] + 'demo/': code for code, item in LANGUAGES.items()})
 
 
 @lru_cache(maxsize=64)
@@ -89,6 +90,7 @@ def context(code):
     for character, escaped in (('<', '003c'), ('>', '003e'), ('&', '0026')):
         encoded = encoded.replace(character, chr(92) + 'u' + escaped)
     return {'seo': seo, 'seo_alternates': alternates, 'seo_jsonld': encoded,
+            'demo_url': LANGUAGES[code]['path'] + 'demo/',
             'public_assets': assets, 'ui_language': code,
             'landing_data': {'language': code, 'locale': seo['locale'],
                              'urls': {key: item['path'] for key, item in LANGUAGES.items()},

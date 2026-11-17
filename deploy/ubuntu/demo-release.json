@@ -1,0 +1,93 @@
+{
+  "release": "DEMO-01",
+  "files": {
+    "backend/config/settings.py": {
+      "before": "c18a567c3353dcd9810d043c4025784d2a40944d918410c7fa24638d2fcff6e7",
+      "after": "2656ef0097a392c974f2659d47909df6857d61e1fd248c98d0a12f7d51a95677"
+    },
+    "backend/config/urls.py": {
+      "before": "03a0cdcabab3d67ccabcf1209eb3fb7e97397d239f0eff7f9f04328ab9013f75",
+      "after": "d40c9c4c2bcd81895cb7cc0659d0a63181550e92ab204fa2db0ff1e8d6cfa07a"
+    },
+    "backend/core/views.py": {
+      "before": "1c96ea7ffd3ac9ca77430b7cb72d5df2c2c64f8cc64e8ad3174cfa445b604deb",
+      "after": "a2d1b49e020a79f9797240c0bd753c42811bdfaea17ed06abea89010a3f36145"
+    },
+    "backend/core/seo.py": {
+      "before": "5e38a60f7206e8f83288d32ab474622bd39458a1f60cfcffa1876a69cd36b5ab",
+      "after": "38543846bb5a94030a05df21e1c70947a6d55c865239a63d7e81bebf7e43f5c1"
+    },
+    "backend/core/templates/core/landing.html": {
+      "before": "d0c9113fc6b49260192fad56be14b9646e9892b82cdda5e09e567fa414d50eae",
+      "after": "dae3a80d3b0bd43608b206d9b04a3012181470b8386ec0f33ece4055230a9588"
+    },
+    "backend/core/static/core/landing.css": {
+      "before": "ed4a80425495af15c196da9891c5f73300a1173ab89e187647d13de883ef42ca",
+      "after": "0b99469852dfceb69f2b6e94672aaa2d8a44840a20325606269d648f7c847f89"
+    },
+    "backend/core/locale/ui.json": {
+      "before": "a7314aadbe0e8b9ce278277be184834f9240383d87d700c5d8337e5b29cb1008",
+      "after": "4c99a884dcf1bf2113c7f218e35ee594d934bdc97eeec0e22a0705b999ad9842"
+    },
+    "backend/core/static/core/ui/translations.js": {
+      "before": "ef5a6cb51515f6f234ddd222dfbaa51b316566e6c24b0e8d3320c42cef991e45",
+      "after": "bfd44a3ba2b372e6cb79d0ef25af02c51e124dcf34b03175dc110b54cf1f28ed"
+    },
+    "backend/demo_booking/__init__.py": {
+      "before": null,
+      "after": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    "backend/demo_booking/models.py": {
+      "before": null,
+      "after": "1a87ffd737935c0759be4a85c56539ec11919f92b0fc4bbf9144c7eda7a7683b"
+    },
+    "backend/demo_booking/services.py": {
+      "before": null,
+      "after": "e05cddcdaf721161349a0f2022eec1058720e6a5160b1ef4bd0c11a0bc121ee3"
+    },
+    "backend/demo_booking/copy.py": {
+      "before": null,
+      "after": "66d8e7538b3aa4281b60c7b183f260cc08dd59f3058a5ba387f99835d4fed583"
+    },
+    "backend/demo_booking/copy.json": {
+      "before": null,
+      "after": "99daf6d6428f8e68e672e8f5fab774f6eab299b08697cff26a935d95f2dc1c87"
+    },
+    "backend/demo_booking/views.py": {
+      "before": null,
+      "after": "e6b46388d0dc818904b62856f36b1e74d9d840609b6e00d3a62c325e0393fbef"
+    },
+    "backend/demo_booking/mail.py": {
+      "before": null,
+      "after": "1cdc9fb8356466a7a868180614f5f51b61d36fe94bdaa4d7b78749fcb00e687d"
+    },
+    "backend/demo_booking/migrations/__init__.py": {
+      "before": null,
+      "after": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "backend/demo_booking/migrations/0001_initial.py": {
+      "before": null,
+      "after": "b42b29b10327fe5c1671d9a162dcf8e7ea11a68d5ba1c000f6be20ea6b7c432f"
+    },
+    "backend/demo_booking/management/commands/deliver_demo_mail.py": {
+      "before": null,
+      "after": "a76c5231611df72b874033cf7af13c99911c8b2fe42b7385c5ed82bb5a536d36"
+    },
+    "backend/demo_booking/templates/demo_booking/page.html": {
+      "before": null,
+      "after": "f80026b0d82d7be08d9b3097f780639af2892d95b1600c099772c40950e3c74e"
+    },
+    "backend/core/static/core/demo-booking.css": {
+      "before": null,
+      "after": "06111f95477b5fc26cddceee952323e3eaec5eb5ab13c45716469580a3a86937"
+    },
+    "backend/core/static/core/demo-booking.js": {
+      "before": null,
+      "after": "add34c3e11cfba428bdd3add6e86e3f71ff46fb79b5bf936263cca29cda35ba1"
+    },
+    "backend/demo_booking/middleware.py": {
+      "before": null,
+      "after": "6d418356713701a20dba83991a39f609816b3489fca5eb40029b06352fc0db06"
+    }
+  }
+}

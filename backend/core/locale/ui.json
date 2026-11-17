@@ -5463,5 +5463,30 @@
     "Sign in",
     "Войти в систему",
     "Přihlásit se"
+  ],
+  "Записатися на демо": [
+    "Book a demo",
+    "Записаться на демо",
+    "Domluvit ukázku"
+  ],
+  "Записатися на демо ↗": [
+    "Book a demo ↗",
+    "Записаться на демо ↗",
+    "Domluvit ukázku ↗"
+  ],
+  "Хочете обговорити систему на прикладі вашого бізнесу?": [
+    "Would you like to discuss the system for your business?",
+    "Хотите обсудить систему на примере вашего бизнеса?",
+    "Chcete probrat systém pro své podnikání?"
+  ],
+  "Обговорімо ваші задачі": [
+    "Let’s discuss your needs",
+    "Обсудим ваши задачи",
+    "Proberme vaše potřeby"
+  ],
+  "Обговорімо задачі вашого бізнесу та можливості OXXOM OBLIK. Напишіть нам або відкрийте форму запису на демонстрацію.": [
+    "Let’s discuss your business needs and OXXOM OBLIK. Email us or open the demo request form.",
+    "Обсудим задачи вашего бизнеса и возможности OXXOM OBLIK. Напишите нам или откройте форму записи на демонстрацию.",
+    "Proberme potřeby vašeho podnikání a možnosti OXXOM OBLIK. Napište nám nebo otevřete formulář pro domluvení ukázky."
   ]
 }

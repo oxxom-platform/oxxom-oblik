@@ -1,4 +1,5 @@
 from django.urls import path
+from demo_booking import views as demo_booking_views
 handler400 = 'core.errors.bad_request'
 handler403 = 'core.errors.permission_denied'
 handler404 = 'core.errors.not_found'
@@ -13,6 +14,11 @@ from inventory import views as inventory_views
 from posting import views as posting_views
 from operations import views as operation_views
 urlpatterns = [path("assets/brand/oxxom-oblik.svg", brand_logo_svg), path("assets/brand/oxxom-oblik.png", brand_logo), path("", home), path("api/v1/health", health), path("api/v1/ready", ready)]
+urlpatterns += [path('demo/', demo_booking_views.page),
+                path('en/demo/', demo_booking_views.page, {'language': 'en'}),
+                path('ru/demo/', demo_booking_views.page, {'language': 'ru'}),
+                path('cs/demo/', demo_booking_views.page, {'language': 'cs'}),
+                path('api/public/demo-requests', demo_booking_views.submit)]
 urlpatterns += [path('en/', home, {'language': 'en'}), path('ru/', home, {'language': 'ru'}),
                 path('favicon.ico', public_brand_asset, {'filename': 'favicon.ico'}),
                 path('cs/', home, {'language': 'cs'}), path('robots.txt', robots), path('sitemap.xml', sitemap),

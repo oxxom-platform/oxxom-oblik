@@ -81,6 +81,13 @@ Job захищається PostgreSQL row lock/lease, Message-ID стабіль�
 
 ## Перевірки
 
+Повний PostgreSQL-набір: **303 tests PASS**, 87 секунд,
+[CI 44152691399](https://github.com/oxxom-platform/oxxom-oblik/actions/runs/44152691399).
+`makemigrations --check --dry-run`: No changes detected. Окремо 6 updater tests
+PASS, а існуюча перевірка error responses/Nginx також PASS.
+Опублікований pinned archive додатково перевірено: 21 runtime-файл і guard hash
+відповідають manifest. Фінальна поведінка mobile menu: open/close, aria-expanded, Escape і повернення фокусу — PASS у Chromium.
+
 - Синтетичні дані, підроблені поля, CSRF/Origin, honeypot, ticket/expiry,
   idempotency, глобальний throttle, місткість та атомарність request/outbox.
 - Два PostgreSQL concurrency-сценарії: один nonce → один request/job;

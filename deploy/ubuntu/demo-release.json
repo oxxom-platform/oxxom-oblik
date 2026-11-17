@@ -79,11 +79,11 @@
     },
     "backend/core/static/core/demo-booking.css": {
       "before": null,
-      "after": "e73c583d5836dbb593f407c619cd299dabcfe549e7e8f71bd9c0c9ddc07510be"
+      "after": "a383816c2b948c99222cfbaabb5d8c38586f26fbc4a943c11189cbd96bbf321f"
     },
     "backend/core/static/core/demo-booking.js": {
       "before": null,
-      "after": "c88acdf697167854ed55d90a425042ecbfa115b85b7d636c23531616a8db39f6"
+      "after": "df5604b2783e3ebf98104c5a5f475a0c4137642935da32e8b55b596b6ce46267"
     }
   }
 }

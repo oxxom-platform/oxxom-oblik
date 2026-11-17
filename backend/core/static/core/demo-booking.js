@@ -2,6 +2,14 @@
  'use strict';
  const form=document.getElementById('booking-form');
  if(!form)return;
+ const mobile=document.querySelector('.mobile-nav');
+ if(mobile){
+  const summary=mobile.querySelector('summary');summary.setAttribute('aria-expanded','false');
+  mobile.addEventListener('toggle',()=>summary.setAttribute('aria-expanded',String(mobile.open)));
+  mobile.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{mobile.open=false;}));
+  document.addEventListener('click',event=>{if(!mobile.contains(event.target))mobile.open=false;});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&mobile.open){mobile.open=false;summary.focus();}});
+ }
  const data=JSON.parse(document.getElementById('booking-data').textContent),messages=data.messages;
  const button=document.getElementById('booking-submit'),label=button.querySelector('span');
  const feedback=document.getElementById('booking-feedback'),receipt=document.getElementById('booking-receipt');

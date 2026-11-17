@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import home, health, ready, brand_logo, brand_logo_svg, workspace_asset, landing_asset, ui_asset
+from core.views import home, health, ready, brand_logo, brand_logo_svg, workspace_asset, landing_asset, ui_asset, robots, sitemap, public_brand_asset
 from core import workspace as workspace_views
 from accounts import auth_views
 from accounts import member_views
@@ -9,6 +9,10 @@ from inventory import views as inventory_views
 from posting import views as posting_views
 from operations import views as operation_views
 urlpatterns = [path("assets/brand/oxxom-oblik.svg", brand_logo_svg), path("assets/brand/oxxom-oblik.png", brand_logo), path("", home), path("api/v1/health", health), path("api/v1/ready", ready)]
+urlpatterns += [path('en/', home, {'language': 'en'}), path('ru/', home, {'language': 'ru'}),
+                path('favicon.ico', public_brand_asset, {'filename': 'favicon.ico'}),
+                path('cs/', home, {'language': 'cs'}), path('robots.txt', robots), path('sitemap.xml', sitemap),
+                path('assets/brand/<str:filename>', public_brand_asset)]
 urlpatterns += [
     path("app/", workspace_views.page),
     path("team/", member_views.workspace),

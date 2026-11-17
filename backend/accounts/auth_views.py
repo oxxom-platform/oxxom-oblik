@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.http import JsonResponse, FileResponse
 from pathlib import Path
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.crypto import constant_time_compare, salted_hmac
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -19,12 +19,18 @@ from .models import User, TOTPDevice, AuthThrottle
 from .mfa import encrypt, decrypt, consume_totp, consume_recovery, recovery_codes, provisioning_qr
 
 
+def has_mfa_session(request, now):
+    started = request.session.get("mfa_started", 0)
+    return bool(request.user.is_authenticated and request.user.is_active and started
+                and 0 <= now - started < settings.SESSION_COOKIE_AGE)
+
+
 def protected(view):
     @wraps(view)
     def wrapped(request, *args, **kwargs):
         now = time.time()
         started = request.session.get("mfa_started", 0)
-        if not request.user.is_authenticated or not request.user.is_active or not started or now - started >= settings.SESSION_COOKIE_AGE:
+        if not has_mfa_session(request, now):
             logout(request)
             return JsonResponse({"error": "authentication_required"}, status=401)
         request.session["mfa_last"] = now
@@ -67,7 +73,10 @@ def unavailable():
 @ensure_csrf_cookie
 @require_GET
 def auth_page(request):
-    return render(request, "accounts/login.html", {'security_mode': request.GET.get('security') == '1'})
+    security_mode = request.GET.get('security') == '1'
+    if not security_mode and has_mfa_session(request, time.time()):
+        return redirect('/app/')
+    return render(request, "accounts/login.html", {'security_mode': security_mode})
 
 
 @require_GET

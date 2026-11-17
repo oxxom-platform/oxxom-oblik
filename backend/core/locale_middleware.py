@@ -13,7 +13,9 @@ class InterfaceLanguageMiddleware:
     def __call__(self, request):
         if request.path.startswith('/assets/'):
             return self.get_response(request)
-        code = language(request.COOKIES.get(COOKIE))
+        from .seo import PUBLIC_PATHS
+        public_language = PUBLIC_PATHS.get(request.path)
+        code = public_language or language(request.COOKIES.get(COOKIE))
         with translation.override(code):
             response = self.get_response(request)
             if isinstance(response, JsonResponse):
@@ -42,7 +44,11 @@ class InterfaceLanguageMiddleware:
                     response['Content-Length'] = len(response.content)
             if isinstance(response, JsonResponse) or response.get('Content-Type', '').startswith('text/html'):
                 response['Content-Language'] = 'uk' if '/print/' in request.path and response.status_code == 200 else code
-                patch_vary_headers(response, ('Cookie',))
+                if public_language is None:
+                    patch_vary_headers(response, ('Cookie',))
+            if public_language is not None and response.status_code == 200:
+                from django.conf import settings
+                response.set_cookie(COOKIE, code, max_age=31536000, samesite='Lax', secure=settings.SESSION_COOKIE_SECURE)
         return response
 
     @staticmethod

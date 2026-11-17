@@ -1,5 +1,6 @@
 """DEMO-01: fixture-only booking. Exact files, DB backup, additive migration, rollback."""
 import fcntl
+import grp
 import hashlib
 import importlib.util
 import json
@@ -10,6 +11,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from types import SimpleNamespace
 
 APP = Path('/srv/oxxom-oblik/app')
 STATE = Path('/srv/oxxom-oblik/update-backups')
@@ -34,6 +36,31 @@ NEW = {
     'backend/demo_booking/templates/demo_booking/page.html',
     'backend/core/static/core/demo-booking.css', 'backend/core/static/core/demo-booking.js',
 }
+DEMO_DIRECTORIES = (
+    'backend/demo_booking', 'backend/demo_booking/migrations',
+    'backend/demo_booking/management', 'backend/demo_booking/management/commands',
+    'backend/demo_booking/templates', 'backend/demo_booking/templates/demo_booking',
+)
+
+
+def prepare_demo_directories(root, guard, service_gid):
+    # Also repair empty directories left by a previous rollback. Never widen
+    # permissions on existing accounts, business modules, or private backups.
+    for name in DEMO_DIRECTORIES:
+        target = root / name
+        guard.safe_target(root, name + '/.permission-scope-check')
+        if target.exists() and not target.is_dir():
+            raise ValueError('Unexpected demo directory type')
+        target.mkdir(mode=0o750, exist_ok=True)
+        os.chown(target, 0, service_gid)
+        os.chmod(target, 0o750)
+
+
+def payload_info(root, payload, service_gid):
+    # Root-owned files remain unwritable by the service; its group can read
+    # the new package. Existing application file metadata is preserved.
+    defaults = SimpleNamespace(st_uid=0, st_gid=service_gid, st_mode=0o640)
+    return {name: defaults if name in NEW else (root / name).stat() for name in payload}
 
 
 def sha(data):
@@ -138,8 +165,8 @@ def main():
                 raise ValueError('Expected production configuration')
             guard.smoke()
             backup = Path(tempfile.mkdtemp(prefix='demo-', dir=STATE))
-            defaults = (APP / 'backend/config/settings.py').stat()
-            info = {name: (APP / name).stat() if (APP / name).exists() else defaults for name in payload}
+            service_gid = grp.getgrnam('oxxom').gr_gid
+            info = payload_info(APP, payload, service_gid)
             for name, original in originals.items():
                 if original is not None:
                     target = backup / 'originals' / name
@@ -155,10 +182,12 @@ def main():
             with (backup / 'checks.log').open('w') as log:
                 print('[1/3] Backing up the database before application changes...', flush=True)
                 backup_database(values, backup / 'before.dump', log)
+                prepare_demo_directories(APP, guard, service_gid)
                 def validate():
                     print('[2/3] Checking code and applying the additive demo migration...', flush=True)
                     for arguments in (['check'], ['migrate', 'demo_booking', '--noinput']):
-                        subprocess.run([PYTHON, '-B', str(APP / 'deploy/ubuntu/manage.py'), *arguments],
+                        subprocess.run(['runuser', '-u', 'oxxom', '--', PYTHON, '-B',
+                                        str(APP / 'deploy/ubuntu/manage.py'), *arguments],
                                        check=True, timeout=90, stdout=log, stderr=log)
                     if env_path.read_bytes() != env_bytes:
                         raise RuntimeError('Environment changed concurrently')

@@ -4,7 +4,7 @@ on:
     paths:
       - 'backend/**'
       - 'deploy/ubuntu/*demo*'
-      - 'tests/test_demo_update.py'
+      - 'tests/test_demo_update*.py'
       - '.github/workflows/demo-booking.yml'
   workflow_dispatch:
 permissions:
@@ -58,3 +58,5 @@ jobs:
           PY
       - run: python backend/manage.py makemigrations --check --dry-run
       - run: python -m unittest discover -s tests -p test_demo_update.py -v
+      - name: Root-owned package and unprivileged service import
+        run: sudo python3 -m unittest discover -s tests -p test_demo_update_permissions.py -v

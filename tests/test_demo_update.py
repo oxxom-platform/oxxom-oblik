@@ -15,6 +15,34 @@ GUARD = (ROOT / update.BASE_HELPER).read_bytes()
 
 
 class DemoUpdateTests(unittest.TestCase):
+    def test_visual_update_accepts_reviewed_versions_and_preserves_unknown_edits(self):
+        spec = importlib.util.spec_from_file_location('demo_visual_update', ROOT / 'deploy/ubuntu/apply-demo-arrow.py')
+        visual = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(visual)
+        names = list(visual.FILES)
+        policy = {name: {'before': update.sha(b'arrow version'),
+                         'previous': [update.sha(b'initial demo version')],
+                         'after': update.sha(b'fitted screen version')} for name in names}
+        payload = {name: b'fitted screen version' for name in names}
+        with tempfile.TemporaryDirectory() as directory, patch.object(visual, 'FILES', policy):
+            root = Path(directory).resolve()
+            guard = update.load_guard(GUARD, root)
+            app = root / 'app'
+            for name in names:
+                (app / name).parent.mkdir(parents=True, exist_ok=True)
+            for previous in (b'initial demo version', b'arrow version', b'fitted screen version'):
+                for name in names:
+                    (app / name).write_bytes(previous)
+                originals = visual.baseline(guard, app, payload)
+                info = {name: (app / name).stat() for name in names}
+                guard.apply_payload(app, payload, originals, info, lambda: None)
+                self.assertTrue(all((app / name).read_bytes() == payload[name] for name in names))
+            (app / names[0]).write_bytes(b'unknown local customization')
+            before = {name: (app / name).read_bytes() for name in names}
+            with self.assertRaises(guard.PreflightError):
+                visual.baseline(guard, app, payload)
+            self.assertEqual(before, {name: (app / name).read_bytes() for name in names})
+
     def archive(self, root, corrupt=False, extra=False, new_baseline=False):
         payload = {name: b'test-code' for name in update.EXISTING | update.NEW}
         manifest = {'release': 'DEMO-01', 'files': {name: {'before': update.sha(b'old') if name in update.EXISTING else None,

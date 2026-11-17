@@ -16,8 +16,11 @@ GUARD = 'deploy/ubuntu/apply-security-update.py'
 GUARD_SHA = '5f68b67de8db6b78598926e557755baa15636c3faabddbf23a470a41b7330dfc'
 FILES = {
   "backend/core/static/core/demo-booking.css": {
-    "before": "06111f95477b5fc26cddceee952323e3eaec5eb5ab13c45716469580a3a86937",
-    "after": "a44ef639949692d4bb123336db10c9dbd6180af8956c309f47a7ccf23eda92d4"
+    "before": "a44ef639949692d4bb123336db10c9dbd6180af8956c309f47a7ccf23eda92d4",
+    "after": "70f05041ace31747222bb40614cd7d1883b58bb076c87b7ee7bb0ff499d46b7c",
+    "previous": [
+      "06111f95477b5fc26cddceee952323e3eaec5eb5ab13c45716469580a3a86937"
+    ]
   },
   "backend/core/static/core/demo-booking.js": {
     "before": "add34c3e11cfba428bdd3add6e86e3f71ff46fb79b5bf936263cca29cda35ba1",
@@ -65,6 +68,18 @@ def verify(guard):
     guard.smoke()
 
 
+def baseline(guard, root, payload):
+    reviewed = {}
+    for name, policy in FILES.items():
+        target = guard.safe_target(root, name)
+        digest = sha(target.read_bytes()) if target.is_file() else None
+        accepted = {policy['before'], policy['after'], *policy.get('previous', [])}
+        if digest not in accepted:
+            raise guard.PreflightError('Unreviewed server change; application unchanged: ' + name)
+        reviewed[name] = {'before': digest, 'after': policy['after']}
+    return guard.verify_baseline(root, {'files': reviewed}, payload)
+
+
 def main():
     if os.geteuid() != 0 or len(sys.argv) != 2:
         raise SystemExit('Run with sudo python3 apply-demo-arrow.py release.tar.gz')
@@ -81,22 +96,22 @@ def main():
             spec = importlib.util.spec_from_file_location('reviewed_arrow_guard', helper_path)
             guard = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(guard)
-            originals = guard.verify_baseline(APP, {'files': FILES}, payload)
+            originals = baseline(guard, APP, payload)
             guard.smoke()
-            backup = Path(tempfile.mkdtemp(prefix='demo-arrow-', dir=STATE))
+            backup = Path(tempfile.mkdtemp(prefix='demo-visual-', dir=STATE))
             info = {name: (APP / name).stat() for name in FILES}
             for name in FILES:
                 target = backup / name
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(APP / name, target)
-            (backup / 'receipt.json').write_text(json.dumps({'release': 'DEMO-ARROW-01', 'files': FILES}, indent=2))
+            (backup / 'receipt.json').write_text(json.dumps({'release': 'DEMO-VISUAL-02', 'files': FILES}, indent=2))
             print('Recovery files: ' + str(backup), flush=True)
             try:
                 guard.apply_payload(APP, payload, originals, info, lambda: verify(guard))
             except BaseException:
                 print('UPDATE FAILED: original demo assets restored; service was not restarted', flush=True)
                 raise
-    print('DEMO-ARROW-01 OK: centred animated arrow to the form; four languages checked')
+    print('DEMO-VISUAL-02 OK: fitted laptop screen and centred form arrow; four languages checked')
     print('Reduced motion supported. Service, NPM, database and MFA were not changed.')
 
 

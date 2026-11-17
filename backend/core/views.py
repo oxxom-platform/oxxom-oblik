@@ -116,7 +116,8 @@ def workspace_asset(request, filename):
 @gzip_page
 def landing_asset(request, filename):
     from django.http import Http404
-    content_types = {'landing.css': 'text/css', 'landing.js': 'text/javascript', 'public-preferences.js': 'text/javascript'}
+    content_types = {'landing.css': 'text/css', 'landing.js': 'text/javascript', 'public-preferences.js': 'text/javascript',
+                     'demo-booking.css': 'text/css', 'demo-booking.js': 'text/javascript'}
     if filename not in content_types:
         raise Http404
     asset = Path(__file__).parent / 'static' / 'core' / filename

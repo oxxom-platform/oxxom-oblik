@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="{{ seo.language }}" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff"><meta name="robots" content="noindex,nofollow">
+  <title>{{ seo.title }}</title><meta name="description" content="{{ seo.description }}">
+  <link rel="canonical" href="{{ seo.url }}">
+  {% for item in seo_alternates %}<link rel="alternate" hreflang="{{ item.language }}" href="{{ item.url }}">{% endfor %}
+  <link rel="alternate" hreflang="x-default" href="{{ seo_alternates.0.url }}">
+  <meta property="og:type" content="website"><meta property="og:site_name" content="OXXOM OBLIK">
+  <meta property="og:title" content="{{ seo.title }}"><meta property="og:description" content="{{ seo.description }}">
+  <meta property="og:url" content="{{ seo.url }}"><meta property="og:locale" content="{{ seo.og }}"><meta property="og:image" content="{{ seo.image }}">
+  {% include 'core/favicon.html' %}
+  <link rel="stylesheet" href="{{ public_assets.ui_css }}"><link rel="stylesheet" href="{{ public_assets.css }}"><link rel="stylesheet" href="{{ booking_css }}">
+  {{ landing_data|json_script:"landing-data" }}{{ booking_data|json_script:"booking-data" }}
+  <script src="{{ public_assets.preferences }}" defer></script><script src="{{ booking_js }}" defer></script>
+</head>
+<body class="demo-booking-page" data-ui-public>
+<a class="skip" href="#booking-main">{{ copy.form_title }}</a>
+<header class="site-header"><div class="container header-inner">
+  <a class="brand" href="{{ home_path }}" aria-label="OXXOM OBLIK"><img src="{{ public_assets.logo }}" alt="OXXOM OBLIK" width="280" height="26"></a>
+  <nav class="booking-header-nav" aria-label="{{ copy.navigation }}"><a href="{{ home_path }}">{{ copy.home }}</a></nav>
+  <div class="booking-header-actions">{% include 'core/public-language-control.html' %}<a class="login-outline" href="/login/">{{ copy.login }}</a></div>
+  <details class="mobile-nav"><summary aria-label="Відкрити меню" aria-controls="booking-mobile-menu"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></summary><div class="mobile-menu-panel" id="booking-mobile-menu"><nav aria-label="{{ copy.navigation }}"><a href="{{ home_path }}">{{ copy.home }}</a><a href="{{ home_path }}#features">Можливості</a><a href="{{ home_path }}#benefits">Переваги</a><a href="{{ home_path }}#pricing">Тарифи</a><a href="{{ home_path }}#contacts">Контакти</a></nav><div class="mobile-preferences">{% include 'core/public-language-control.html' %}</div><a class="button mobile-login" href="/login/">{{ copy.login }}</a></div></details>
+</div></header>
+<main id="booking-main">
+  <section class="booking-hero container" aria-labelledby="booking-title">
+    <div class="booking-hero-copy" data-ui-native><p class="booking-eyebrow"><span class="booking-dot" aria-hidden="true"></span>{{ copy.eyebrow }}</p>
+      <h1 id="booking-title">{{ copy.heading }} <span>OXXOM OBLIK</span></h1><p class="booking-description">{{ copy.description }}</p>
+      <span class="booking-test-pill">{{ copy.test_badge }}</span>
+    </div>
+    <div class="booking-visual"><div class="booking-visual-glow" aria-hidden="true"></div><div class="booking-laptop" aria-hidden="true"><div class="booking-screen">{% include 'core/device-app.html' %}</div><div class="booking-deck"></div></div><p>{{ copy.illustration }}</p></div>
+  </section>
+  <section class="booking-card container" aria-labelledby="booking-form-title" data-ui-native>
+    <div class="booking-story"><span class="booking-icon large" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 2v6m10-6v6M3 11h18m-14 4h3m4 0h3m-10 3h3"/></svg></span>
+      <h2 id="booking-form-title">{{ copy.form_title }}</h2><p class="booking-story-intro">{{ copy.form_intro }}</p>
+      <ul class="booking-benefits">
+        <li><span class="booking-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5m-18 5 9 5 9-5"/></svg></span><div><h3>{{ copy.feature_1 }}</h3><p>{{ copy.feature_1_note }}</p></div></li>
+        <li><span class="booking-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="5" cy="5" r="3"/><circle cx="19" cy="5" r="3"/><circle cx="12" cy="19" r="3"/><path d="M8 5h8M6 8l5 8m7-8-5 8"/></svg></span><div><h3>{{ copy.feature_2 }}</h3><p>{{ copy.feature_2_note }}</p></div></li>
+        <li><span class="booking-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 20V11h4v9m4 0V7h4v13m4 0V3h2v17M2 21h21"/></svg></span><div><h3>{{ copy.feature_3 }}</h3><p>{{ copy.feature_3_note }}</p></div></li>
+      </ul>
+      <div class="booking-contact"><p>{{ copy.contact_note }}</p><a href="mailto:info@oxxom.com.ua">info@oxxom.com.ua <span aria-hidden="true">↗</span></a></div>
+    </div>
+    <form id="booking-form" class="booking-form" action="/api/public/demo-requests" method="post" aria-describedby="booking-test-notice">
+      {% csrf_token %}<input type="hidden" name="ticket" value="{{ ticket }}">
+      <div class="booking-trap" aria-hidden="true"><label for="booking-website">{{ copy.website }}</label><input id="booking-website" name="website" tabindex="-1" autocomplete="off"></div>
+      <p class="booking-sample-label">{{ copy.sample_note }}</p>
+      <div class="booking-field"><label for="booking-name">{{ copy.name }} <span aria-hidden="true">*</span></label><input id="booking-name" value="{{ fixture.name }}" readonly autocomplete="off"></div>
+      <div class="booking-field"><label for="booking-company">{{ copy.company }} <span aria-hidden="true">*</span></label><input id="booking-company" value="{{ fixture.company }}" readonly autocomplete="off"></div>
+      <div class="booking-field-row"><div class="booking-field"><label for="booking-phone">{{ copy.phone }} <span aria-hidden="true">*</span></label><input id="booking-phone" type="tel" value="{{ fixture.phone }}" readonly autocomplete="off"></div><div class="booking-field"><label for="booking-email">{{ copy.email }} <span aria-hidden="true">*</span></label><input id="booking-email" type="email" value="{{ fixture.email }}" readonly autocomplete="off"></div></div>
+      <div class="booking-field"><label for="booking-schedule">{{ copy.schedule }}</label><input id="booking-schedule" value="{{ copy.schedule_placeholder }}" readonly autocomplete="off"></div>
+      <p id="booking-test-notice" class="booking-test-notice">{{ copy.test_notice }}</p>
+      <button class="button booking-submit" id="booking-submit" type="submit" disabled><svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 2v6m10-6v6M3 11h18m5 5 2 2 4-4"/></svg><span>{{ copy.submit }}</span></button>
+      <div id="booking-feedback" class="booking-feedback" role="status" aria-live="polite" tabindex="-1" hidden></div><p id="booking-receipt" class="booking-receipt" hidden><span>{{ copy.receipt }}</span><code></code></p>
+      <noscript><p>{{ copy.no_js }}</p><a href="mailto:info@oxxom.com.ua">info@oxxom.com.ua</a></noscript>
+      <p class="booking-privacy-note">{{ copy.privacy_note }}</p>
+    </form>
+  </section>
+  <section class="booking-promises container" data-ui-native aria-label="{{ copy.form_title }}"><div><span class="booking-promise-icon" aria-hidden="true">◷</span><p><strong>{{ copy.bottom_1 }}</strong><span>{{ copy.bottom_1_note }}</span></p></div><div><span class="booking-promise-icon" aria-hidden="true">▱</span><p><strong>{{ copy.bottom_2 }}</strong><span>{{ copy.bottom_2_note }}</span></p></div><div><span class="booking-promise-icon" aria-hidden="true">✓</span><p><strong>{{ copy.bottom_3 }}</strong><span>{{ copy.bottom_3_note }}</span></p></div></section>
+</main>
+<footer class="container site-footer booking-footer" data-ui-native><a class="brand" href="{{ home_path }}" aria-label="OXXOM OBLIK"><img src="{{ public_assets.logo }}" alt="OXXOM OBLIK" width="230" height="22" loading="lazy"></a><p>{{ copy.footer }}</p><a class="footer-contact" href="mailto:info@oxxom.com.ua">info@oxxom.com.ua</a></footer>
+</body>
+</html>

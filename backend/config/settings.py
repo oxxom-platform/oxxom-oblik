@@ -10,7 +10,7 @@ DEBUG = CONFIG["debug"]
 ALLOWED_HOSTS = CONFIG["hosts"]
 CSRF_TRUSTED_ORIGINS = CONFIG["origins"]
 DATABASES = {"default": CONFIG["database"]}
-INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports"]
+INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports", "demo_booking"]
 MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "core.errors.ErrorPageMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
               "core.locale_middleware.InterfaceLanguageMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
               "django.contrib.auth.middleware.AuthenticationMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
@@ -71,3 +71,23 @@ if os.environ.get("TRUST_PROXY", "false") == "true":
 SECURE_HSTS_SECONDS = 3600 if CONFIG["mode"] == "production" else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False
+
+# Demo booking is a fixture-only prototype until the owner approves live intake.
+# Optional manual test email is separate from any HUB/backup mail configuration.
+OXXOM_DEMO_SMTP = None
+if os.environ.get('OXXOM_DEMO_TEST_SMTP_ENABLED', 'false') == 'true':
+    from django.core.exceptions import ImproperlyConfigured
+    from .environment import required
+    try:
+        demo_port = int(os.environ.get('OXXOM_DEMO_SMTP_PORT', '587'))
+        demo_security = os.environ.get('OXXOM_DEMO_SMTP_SECURITY', 'starttls')
+        if not 1 <= demo_port <= 65535 or demo_security not in ('starttls', 'tls'):
+            raise ValueError('Invalid demo SMTP policy')
+        OXXOM_DEMO_SMTP = {
+            'host': required(os.environ, 'OXXOM_DEMO_SMTP_HOST'), 'port': demo_port,
+            'username': required(os.environ, 'OXXOM_DEMO_SMTP_USER'),
+            'password': required(os.environ, 'OXXOM_DEMO_SMTP_PASSWORD'),
+            'use_tls': demo_security == 'starttls', 'use_ssl': demo_security == 'tls', 'timeout': 10,
+        }
+    except ValueError:
+        raise ImproperlyConfigured('Invalid test demo SMTP configuration; values omitted') from None

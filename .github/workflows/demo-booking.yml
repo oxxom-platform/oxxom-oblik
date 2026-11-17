@@ -1,0 +1,60 @@
+name: Synthetic demo booking
+on:
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'deploy/ubuntu/*demo*'
+      - 'tests/test_demo_update.py'
+      - '.github/workflows/demo-booking.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  postgres:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ci_oblik
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: synthetic-ci-only-not-a-production-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      APP_ENV: test
+      DJANGO_SECRET_KEY: synthetic-ci-only-secret-key-not-for-deployment-1234567890
+      POSTGRES_DB: ci_oblik
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: synthetic-ci-only-not-a-production-password
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: '5432'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.txt
+      - name: Full Django suite on isolated PostgreSQL
+        working-directory: backend
+        run: |
+          python - <<'PY'
+          import os
+          from cryptography.fernet import Fernet
+          os.environ['OXXOM_MFA_KEY'] = Fernet.generate_key().decode()
+          os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+          import django
+          django.setup()
+          from django.core.management import call_command
+          call_command('test', interactive=False, verbosity=1)
+          PY
+      - run: python backend/manage.py makemigrations --check --dry-run
+      - run: python -m unittest discover -s tests -p test_demo_update.py -v

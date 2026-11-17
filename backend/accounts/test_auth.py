@@ -133,6 +133,17 @@ class AuthenticationTests(TestCase):
                 self.assertEqual(client.get('/login/').status_code, 200)
                 self.assertEqual(client.get('/api/v1/organizations').status_code, 401)
 
+    def test_public_demo_booking_preserves_the_existing_seven_day_mfa_session(self):
+        self.full_login()
+        key = self.client.session.session_key
+        started = self.client.session['mfa_started']
+        expiry = self.client.session.get_expiry_date()
+        self.assertEqual(self.client.get('/en/demo/').status_code, 200)
+        self.assertEqual(self.client.session.session_key, key)
+        self.assertEqual(self.client.session['mfa_started'], started)
+        self.assertEqual(self.client.session.get_expiry_date(), expiry)
+        self.assertRedirects(self.client.get('/login/'), '/app/')
+
     def test_public_language_versions_preserve_mfa_and_reach_the_workspace(self):
         self.full_login()
         started = self.client.session['mfa_started']

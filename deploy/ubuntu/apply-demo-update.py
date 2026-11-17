@@ -93,7 +93,8 @@ def backup_database(values, destination, log):
     subprocess.run([
         'pg_dump', '--format=custom', '--no-password', '--file', str(destination),
         '--host', values.get('POSTGRES_HOST', '127.0.0.1'),
-        '--port', values.get('POSTGRES_PORT', '5432'), '--username', values['POSTGRES_USER'],
+        # Match config.environment.configuration's fallback, not a guessed port.
+        '--port', values.get('POSTGRES_PORT', '55432'), '--username', values['POSTGRES_USER'],
         '--dbname', values['POSTGRES_DB'],
     ], env=env, check=True, timeout=180, stdout=log, stderr=log)
     if destination.stat().st_size < 100:

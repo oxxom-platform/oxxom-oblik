@@ -84,6 +84,7 @@ class DemoUpdateTests(unittest.TestCase):
                 update.backup_database(values, destination, io.StringIO())
             self.assertNotIn('PRIVATE_CREDENTIAL', ' '.join(calls[0][0]))
             self.assertEqual(calls[0][1]['env']['PGPASSWORD'], 'PRIVATE_CREDENTIAL')
+            self.assertEqual(calls[0][0][calls[0][0].index('--port') + 1], '55432')
             self.assertEqual(calls[1][0][0], 'pg_restore')
 
     def test_backup_failure_happens_before_application_write(self):

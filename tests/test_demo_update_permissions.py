@@ -35,6 +35,7 @@ class DemoPermissionTests(unittest.TestCase):
             payload = {package: b'', module: b'sentinel = 42\n'}
             # Reproduce the old installer: root:root 0750 denies service import.
             guard.replace(root / package, b'', settings.stat())
+            guard.replace(root / module, payload[module], settings.stat())
             script = ('import sys, os; sys.path.insert(0, ' + repr(str(root / 'backend'))
                       + '); import demo_booking.services as service; assert service.sentinel == 42; '
                       + 'assert not os.access(service.__file__, os.W_OK)')
@@ -46,6 +47,7 @@ class DemoPermissionTests(unittest.TestCase):
             self.assertIn('ModuleNotFoundError', failed.stderr)
             # A previous rollback leaves the inaccessible empty directory.
             (root / package).unlink()
+            (root / module).unlink()
             update.prepare_demo_directories(root, guard, account.pw_gid)
             info = update.payload_info(root, payload, account.pw_gid)
             guard.apply_payload(root, payload, {key: None for key in payload}, info, lambda: None)

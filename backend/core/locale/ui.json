@@ -64,10 +64,10 @@
     "работает",
     "pracuje"
   ],
-  "на вас.": [
-    "for you.",
-    "на вас.",
-    "pro vás."
+  "на вас": [
+    "for you",
+    "на вас",
+    "pro vás"
   ],
   "Фінанси, склад, документи й аналітика в одній системі.": [
     "Finance, inventory, documents and analytics in one system.",
@@ -594,10 +594,10 @@
     "Индивидуальные потребности для обсуждения.",
     "Individuální potřeby k projednání."
   ],
-  "Плани не активують підписку й не гарантують ще не реалізованих можливостей. Локальний MVP працює за наданим власником доступом.": [
-    "Plans do not activate a subscription or guarantee features that are not yet implemented. The local MVP requires access granted by the owner.",
-    "Планы не активируют подписку и не гарантируют ещё не реализованные возможности. Локальный MVP работает по доступу, предоставленному владельцем.",
-    "Tarify neaktivují předplatné ani nezaručují dosud neimplementované funkce. Lokální MVP vyžaduje přístup udělený vlastníkem."
+  "Плани не активують підписку й не гарантують ще не реалізованих можливостей. Поточний MVP працює за наданим власником доступом.": [
+    "Plans do not activate a subscription or guarantee features that are not yet implemented. The current MVP requires access granted by the owner.",
+    "Планы не активируют подписку и не гарантируют ещё не реализованные возможности. Текущий MVP работает по доступу, предоставленному владельцем.",
+    "Tarify neaktivují předplatné ani nezaručují dosud neimplementované funkce. Současné MVP vyžaduje přístup udělený vlastníkem."
   ],
   "КОРИСНО ЗНАТИ": [
     "GOOD TO KNOW",
@@ -5438,5 +5438,30 @@
     "Maximum value: {0}.",
     "Максимальное значение: {0}.",
     "Maximální hodnota: {0}."
+  ],
+  "Переглянути демо": [
+    "View demo",
+    "Посмотреть демо",
+    "Prohlédnout ukázku"
+  ],
+  "Облік товарів, послуг, складу й оплат в одному сервісі.": [
+    "Track goods, services, inventory and payments in one workspace.",
+    "Учёт товаров, услуг, склада и оплат в одном сервисе.",
+    "Evidence zboží, služeb, skladových zásob a plateb v jedné aplikaci."
+  ],
+  "Версія MVP": [
+    "MVP version",
+    "Версия MVP",
+    "Verze MVP"
+  ],
+  "Це MVP з обліком товарів, документів, складу та оплат. Сервіс розгорнуто на Ubuntu; резервну копію та тестове відновлення перевірено. Бухгалтерське приймання й комерційні умови уточнюються перед пілотом.": [
+    "This MVP covers goods, documents, inventory and payment records. The service runs on Ubuntu; a backup and test restore have been verified. Accounting acceptance and commercial terms are being finalised before the pilot.",
+    "Это MVP для учёта товаров, документов, склада и оплат. Сервис развёрнут на Ubuntu; резервная копия и тестовое восстановление проверены. Бухгалтерская приёмка и коммерческие условия уточняются перед пилотом.",
+    "Jde o MVP pro evidenci zboží, dokladů, skladu a plateb. Služba běží na Ubuntu; záloha a zkušební obnova byly ověřeny. Před pilotním provozem se upřesňují účetní ověření a obchodní podmínky."
+  ],
+  "Увійти в систему": [
+    "Sign in",
+    "Войти в систему",
+    "Přihlásit se"
   ]
 }

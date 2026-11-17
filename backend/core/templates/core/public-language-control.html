@@ -1,0 +1,6 @@
+<details class="language-switch public-language">
+  <summary aria-label="Мова інтерфейсу">{{ seo.label }}<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg></summary>
+  <nav class="public-language-options" aria-label="Мова інтерфейсу" data-ui-native>
+    {% for item in seo_alternates %}<a href="{{ item.path }}" lang="{{ item.language }}" hreflang="{{ item.language }}"{% if item.language == seo.language %} aria-current="page"{% endif %}><span>{{ item.name }}</span><small>{{ item.label }}</small></a>{% endfor %}
+  </nav>
+</details>

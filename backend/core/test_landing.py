@@ -25,7 +25,7 @@ class LandingTests(SimpleTestCase):
         self.assertIn('no-store', response['Cache-Control'])
         self.assertContains(response, 'lang="uk"')
         self.assertContains(response, 'Ілюстративні дані')
-        self.assertContains(response, '/assets/brand/oxxom-oblik.svg?v=20261115-original-aligned')
+        self.assertContains(response, '/assets/brand/oxxom-oblik-web.png?v=')
         self.assertNotContains(response, 'workspace-config')
         self.assertNotContains(response, 'id="organization"')
         self.assertNotContains(response, 'id="motion-toggle"')
@@ -36,7 +36,7 @@ class LandingTests(SimpleTestCase):
             if href.startswith('#'):
                 self.assertIn(href[1:], parser.ids)
             else:
-                self.assertIn(href, ('/', '/login/'))
+                self.assertIn(href, ('/', '/en/', '/ru/', '/cs/', '/login/'))
                 self.assertFalse(urlsplit(href).netloc)
         self.assertEqual(self.client.post('/').status_code, 405)
 
@@ -66,7 +66,7 @@ class LandingTests(SimpleTestCase):
         response = self.client.get('/')
         self.assertContains(response, 'id="mobile-menu-panel"')
         self.assertNotContains(response, 'data-theme-choice')
-        self.assertContains(response, 'class="language-switch"')
+        self.assertContains(response, 'class="language-switch public-language"')
         for language in ('uk', 'en', 'ru', 'cs'):
-            self.assertContains(response, f'value="{language}" lang="{language}"')
+            self.assertContains(response, f'lang="{language}" hreflang="{language}"')
         self.assertNotContains(response, '>Меню <')

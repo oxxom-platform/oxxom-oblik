@@ -16,14 +16,18 @@
  const sources=new Map(),attributes=new Map(),dynamic=new Map();
  function t(source){const row=window.OxxomTranslations?.[source];return language==='uk'||!row?source:row[{en:0,ru:1,cs:2}[language]];}
  function format(source,...values){return t(source).replace(/\{(\d+)\}/g,(match,index)=>index<values.length?String(values[index]):match);}
- function text(node,source){if(!node)return;dynamic.set(node,source);node.textContent=t(source);}
+ function displayText(node,value){
+  const element=node.nodeType===3?node.parentElement:node;
+  return document.body?.dataset.uiPage==='landing'&&element.closest('h1,h2,h3,h4,h5,h6')?value.replace(/\.+(\s*)$/u,'$1'):value;
+ }
+ function text(node,source){if(!node)return;dynamic.set(node,source);node.textContent=displayText(node,t(source));}
  function controls(){
   document.querySelectorAll('[data-language-select]').forEach(select=>select.value=language);
  }
  function translate(){
-  for(const [node,source] of sources){if(node.isConnected)node.nodeValue=source.replace(source.trim(),t(source.trim()));else sources.delete(node);}
+  for(const [node,source] of sources){if(node.isConnected)node.nodeValue=displayText(node,source.replace(source.trim(),t(source.trim())));else sources.delete(node);}
   for(const [node,entries] of attributes){if(node.isConnected)for(const [key,source] of entries)node.setAttribute(key,t(source));else attributes.delete(node);}
-  for(const [node,source] of dynamic){if(node.isConnected)node.textContent=t(source);else dynamic.delete(node);}
+  for(const [node,source] of dynamic){if(node.isConnected)node.textContent=displayText(node,t(source));else dynamic.delete(node);}
   if(document.body?.hasAttribute('data-ui-public'))root.lang=language;
   document.querySelectorAll('[data-ui-scope]').forEach(scope=>scope.lang=language);
   const locale=document.querySelector('meta[property="og:locale"]');if(locale)locale.content={uk:'uk_UA',en:'en_GB',ru:'ru_UA',cs:'cs_CZ'}[language];
@@ -43,7 +47,7 @@
   const scopes=document.body.hasAttribute('data-ui-public')?[document.head,document.body]:[...document.querySelectorAll('[data-ui-scope]')];
   for(const scope of scopes){
    const walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT);let node;
-   while((node=walker.nextNode())){if(!node.parentElement.closest('script,style,textarea,input,#codes,#orgs,[data-ui-private]')&&window.OxxomTranslations?.[node.nodeValue.trim()])sources.set(node,node.nodeValue);}
+   while((node=walker.nextNode())){if(!node.parentElement.closest('script,style,textarea,input,#codes,#orgs,[data-ui-private]')&&(window.OxxomTranslations?.[node.nodeValue.trim()]||(document.body.dataset.uiPage==='landing'&&node.parentElement.closest('h1,h2,h3,h4,h5,h6'))))sources.set(node,node.nodeValue);}
    scope.querySelectorAll('[aria-label],[alt],[title],meta[content]').forEach(element=>{
     const values=[];for(const key of ['aria-label','alt','title','content']){const value=element.getAttribute(key);if(value&&window.OxxomTranslations?.[value])values.push([key,value]);}if(values.length)attributes.set(element,values);
    });

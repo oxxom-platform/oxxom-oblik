@@ -103,6 +103,53 @@ class AuthenticationTests(TestCase):
         self.password_step(other)
         self.assertEqual(other.post('/api/v1/auth/verify', {'code': code}).status_code, 400)
 
+    def test_landing_then_login_returns_to_workspace_without_reauthenticating(self):
+        self.full_login()
+        started = self.client.session['mfa_started']
+        expires = self.client.session.get_expiry_date()
+        for _ in range(2):
+            self.assertEqual(self.client.get('/').status_code, 200)
+            response = self.client.get('/login/')
+            self.assertRedirects(response, '/app/')
+            self.assertIn('no-store', response['Cache-Control'])
+            self.assertEqual(self.client.session['mfa_started'], started)
+            self.assertEqual(self.client.session.get_expiry_date(), expires)
+        response = self.client.get('/login/?security=1')
+        self.assertEqual(response.status_code, 200)
+        self.assertIs(response.context['security_mode'], True)
+        self.assertEqual(self.client.get('/api/v1/organizations').status_code, 200)
+
+    def test_login_page_never_resumes_an_unverified_or_expired_session(self):
+        self.password_step()
+        self.assertEqual(self.client.get('/login/').status_code, 200)
+        for started in (None, time.time() - 604801, time.time() + 600):
+            with self.subTest(started=started):
+                client = Client()
+                client.force_login(self.user)
+                if started is not None:
+                    session = client.session
+                    session['mfa_started'] = started
+                    session.save()
+                self.assertEqual(client.get('/login/').status_code, 200)
+                self.assertEqual(client.get('/api/v1/organizations').status_code, 401)
+
+    def test_public_language_versions_preserve_mfa_and_reach_the_workspace(self):
+        self.full_login()
+        started = self.client.session['mfa_started']
+        session_key = self.client.session.session_key
+        for code, path in [('en', '/en/'), ('cs', '/cs/'), ('ru', '/ru/'), ('uk', '/')]:
+            with self.subTest(language=code):
+                response = self.client.get(path)
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response['Content-Language'], code)
+                self.assertEqual(self.client.cookies['oxxom_language'].value, code)
+                self.assertEqual(self.client.session['mfa_started'], started)
+                self.assertEqual(self.client.session.session_key, session_key)
+                response = self.client.get('/login/', follow=True)
+                self.assertEqual(response.redirect_chain, [('/app/', 302)])
+                self.assertContains(response, 'lang="' + code + '"')
+                self.assertEqual(response['X-Robots-Tag'], 'noindex, nofollow')
+
     def test_recovery_code_is_single_use_and_regeneration_revokes_old_codes(self):
         self.password_step()
         setup = self.client.post('/api/v1/auth/setup').json()
@@ -178,6 +225,7 @@ class AuthenticationTests(TestCase):
         self.full_login()
         self.user.set_password('Changed-For-Tests-Password-792!')
         self.user.save()
+        self.assertEqual(self.client.get('/login/').status_code, 200)
         self.assertEqual(self.client.get('/api/v1/organizations').status_code, 401)
 
     def test_disable_then_reenable_does_not_restore_session(self):
@@ -186,6 +234,7 @@ class AuthenticationTests(TestCase):
         self.user.save(update_fields=['is_active'])
         self.user.is_active = True
         self.user.save(update_fields=['is_active'])
+        self.assertEqual(self.client.get('/login/').status_code, 200)
         self.assertEqual(self.client.get('/api/v1/organizations').status_code, 401)
 
     def test_membership_revocation_is_immediate(self):

@@ -11,7 +11,7 @@ ALLOWED_HOSTS = CONFIG["hosts"]
 CSRF_TRUSTED_ORIGINS = CONFIG["origins"]
 DATABASES = {"default": CONFIG["database"]}
 INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports"]
-MIDDLEWARE = ["django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
+MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
               "core.locale_middleware.InterfaceLanguageMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
               "django.contrib.auth.middleware.AuthenticationMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF = "config.urls"
@@ -41,6 +41,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 LANGUAGE_CODE = "uk"
+OXXOM_INDEX_PUBLIC = os.environ.get('OXXOM_INDEX_PUBLIC', 'true' if CONFIG['mode'] == 'production' else 'false') == 'true'
 TIME_ZONE = "Europe/Kyiv"
 USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

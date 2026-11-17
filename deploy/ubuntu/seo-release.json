@@ -1,0 +1,187 @@
+{
+  "release": "SEO-01",
+  "base_commit": "73dd8499ab108eb164858aef0e86906ae4a3cd2e",
+  "files": {
+    "backend/accounts/auth_views.py": {
+      "sha256": "7dc67fd6a470831c40b473329954b370725056aced962ad13c27e125999ce097",
+      "before": [
+        "7fddbc7019ecc4bafd35f61920198929ee6420aa07f9d946d365c07b7d8a4074",
+        "7dc67fd6a470831c40b473329954b370725056aced962ad13c27e125999ce097"
+      ]
+    },
+    "backend/config/settings.py": {
+      "sha256": "e9fbc107b3f9fed885ceb577e7ee7196c235e98580a3c53fbcb8ad66592a48d0",
+      "before": [
+        "ff98233db5e5123263c19bfa09b7d081989839b62297d44c4c48fe4df04227cb"
+      ]
+    },
+    "backend/config/urls.py": {
+      "sha256": "873769ac397526239a97fa353c65c3e9ec7fe08c2474ae5a37ad997e4c7f0ce1",
+      "before": [
+        "e96c5206ca284e544ec26092d913175d2f34a40a2e464386208951d41aab412d"
+      ]
+    },
+    "backend/core/views.py": {
+      "sha256": "1c96ea7ffd3ac9ca77430b7cb72d5df2c2c64f8cc64e8ad3174cfa445b604deb",
+      "before": [
+        "893d5c0f985cd72d4ceb36d63e99b2ff317e5ac6961284e1ee474854fa816e19"
+      ]
+    },
+    "backend/core/locale_middleware.py": {
+      "sha256": "0bfbec75d1f180febf427bfb4ae6da335c47d21f3938cca14e2749dea23e5ff2",
+      "before": [
+        "b98350c96d3fefd0bdbf9fe099410665b2ab279a0405fbccd758f5061dfe150e"
+      ]
+    },
+    "backend/core/seo.py": {
+      "sha256": "5e38a60f7206e8f83288d32ab474622bd39458a1f60cfcffa1876a69cd36b5ab",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/locale/ui.json": {
+      "sha256": "a7314aadbe0e8b9ce278277be184834f9240383d87d700c5d8337e5b29cb1008",
+      "before": [
+        "d2645fece4d19cc76661073c57e1c2254c7938f44f4a7451a785a1087a9bd0cf",
+        "3619c3065a481896ad931f8ab23e785ee563be7e292cf9e14a90f5f5bd686063"
+      ]
+    },
+    "backend/core/locale/landing-demo.json": {
+      "sha256": "ad55fb85476297b140d14d7b3faf81a7c8af4a64caf41588e03fd57de99ac40a",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/ui/translations.js": {
+      "sha256": "ef5a6cb51515f6f234ddd222dfbaa51b316566e6c24b0e8d3320c42cef991e45",
+      "before": [
+        "3a7cfceffa7e3bf7ef0e4b22919cc6766d66b28c90c809cf962d387f235b18f0",
+        "161e9d685cc082dc2a9ceaf75d7c61281a09caab22461585a25882159c816445"
+      ]
+    },
+    "backend/core/static/core/ui/preferences.js": {
+      "sha256": "02e0442cb5c7bc5b68e11f406de359389ffa1641c270941664b9f3a8a6e08715",
+      "before": [
+        "4d189754b5ebcfa96351c1d76b090fb292173cfa29b4299132ef85166ca568ca",
+        "02e0442cb5c7bc5b68e11f406de359389ffa1641c270941664b9f3a8a6e08715"
+      ]
+    },
+    "backend/core/static/core/landing.css": {
+      "sha256": "ed4a80425495af15c196da9891c5f73300a1173ab89e187647d13de883ef42ca",
+      "before": [
+        "d748f8ecfa20c27d4f578ef4319b4133881a04a77255c6fc33851b0ec7615f9d",
+        "d3ad50ac10dc9e5aa3f4ec192a393a7914141d612bfb75d507fca3ba3e0c61d1"
+      ]
+    },
+    "backend/core/static/core/landing.js": {
+      "sha256": "1392f5a949ddbc332b335072340068b152c81f1b66eff389392a99b503244385",
+      "before": [
+        "63be87e090d159dffc525d5ecb4cec8673465789bb364409ef2a924e87dceea9"
+      ]
+    },
+    "backend/core/static/core/public-preferences.js": {
+      "sha256": "f51783c82641636e35bff6a3e3eb2f7c22fa4eaf349b1f6db60fbc5f9f92db97",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/oxxom-oblik-web.png": {
+      "sha256": "86473751ee9ff163e15074a7c149e998732261aa9d09bdcbb85e1c84a823e92b",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/og-oblik-uk.png": {
+      "sha256": "3b5661ee1dc1d1079a25f21df38540133afefac92c470ed7a1fd9d77aa85a805",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/og-oblik-en.png": {
+      "sha256": "2e8e76ac0a30150fadc5b2fbdf2baf97cf9bab0f4b815bcd5f1185a9b81176bb",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/og-oblik-ru.png": {
+      "sha256": "304e2d2cda6fc58fb28d103220b3a5b221c51931f3a0d8fbcb3689d8516383a0",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/og-oblik-cs.png": {
+      "sha256": "c882a1548027f4b53e4c4db0555c72f5627a41a23919bf21f57bb02b589d09c5",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/favicon-oblik.png": {
+      "sha256": "1fd603c22e0c964c2e2fe69353d25d584d34c2d14e948a85491dc5de67e73084",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/apple-touch-oblik.png": {
+      "sha256": "a0b0c98be60e8f957dbbf41110875b00f984127d6ff330635fc6c3151c79516b",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/static/core/favicon.ico": {
+      "sha256": "37bc8ff0c5a4b57afcd09f81ff82adac23411d23504815f730802449a0a4f890",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/templates/core/landing.html": {
+      "sha256": "d0c9113fc6b49260192fad56be14b9646e9892b82cdda5e09e567fa414d50eae",
+      "before": [
+        "1eaf1761dcf54da7725ae0d5c3635a10dbf3fabdba5d3d89f691542c289688c5",
+        "cbab53cdaf7c4a9925af0e88d843392a4c7b0b7c98d84a16213bacabd4bb04a8"
+      ]
+    },
+    "backend/core/templates/core/public-language-control.html": {
+      "sha256": "023d2fbb5a8bb43ebdf7379029e94a391a53cee967bdde34f3f865e9c5e15c8b",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/templates/core/device-app.html": {
+      "sha256": "fc48ef4aeaebb5baeca4471924eeae4037032221c4be9857033e6c41909bd11a",
+      "before": [
+        "c8eee5bfe113d9d0421eb4382ca64dbcfc960c34491048ae33db61cb85940563"
+      ]
+    },
+    "backend/core/templates/core/device-phone.html": {
+      "sha256": "505680958d954273fd472aecb1dac69e8516a036f7fb89a6d25ae7a049e44de3",
+      "before": [
+        "59d25a71cbb20a5314e9affa7418879d422eaf1345ba5c9fcdfaadae8d187ff4"
+      ]
+    },
+    "backend/core/templates/core/ui-head.html": {
+      "sha256": "9fffee154e4452e7406a66e37a0f5299c4b9282f58d5ad5c8eed6bc517cc9f3d",
+      "before": [
+        "9ff921da55c59f003d4ff4fbaae30e35520497d40996ad800bdaf956cc98688c",
+        "cb592bf23ba464996bc8808322338a6cab70a261c4f17d9b24bb57bd4ea573f3"
+      ]
+    },
+    "backend/core/templates/core/favicon.html": {
+      "sha256": "f8d3c1bf0058bac6deae8c5955c26e238815e81953214c8b4e07cb49e1a3e87f",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/test_seo.py": {
+      "sha256": "959bae5cce889f3680c4b93cb8409fda293e6588aa3dc16ba96745baf942d121",
+      "before": [
+        null
+      ]
+    },
+    "backend/core/test_landing.py": {
+      "sha256": "fcc2cfdf2a5fd9a9c883ac56e6ad708388108e4e2ab57e980b85098ef534688d",
+      "before": [
+        "a83f76abe4a25e4beed7b0cbbd69c20bd37cbbc6a1d602d9408ca1e968d0b5b1"
+      ]
+    }
+  }
+}

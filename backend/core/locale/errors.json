@@ -1,0 +1,50 @@
+{
+  "uk": {
+    "common": {"product": "ОБЛІК ДЛЯ ВАШОГО БІЗНЕСУ", "label": "Повідомлення системи", "actions": "Доступні дії", "home": "На головну", "workspace": "Робочий простір", "help": "Якщо ситуація повторюється, зверніться до адміністратора вашої організації", "signature": "Менше рутини. Більше порядку"},
+    "400": ["Не вдалося обробити запит", "Поверніться до потрібного розділу та повторіть дію. Якщо надсилали форму, перевірте введені дані."],
+    "403": ["Потрібен доступ до розділу", "Ваших прав недостатньо для цієї дії. Зверніться до власника організації, якщо вам потрібен доступ."],
+    "404": ["Цю сторінку не знайдено", "Можливо, адреса змінилася або в посиланні є помилка. Перейдіть на головну чи до робочого простору."],
+    "429": ["Зробімо невелику паузу", "Надійшло забагато запитів. Зачекайте перед наступною спробою. Для входу пауза може тривати до 15 хвилин."],
+    "500": ["Не вдалося завершити дію", "У системі сталася помилка. Перед повторним збереженням або проведенням перевірте стан документа в робочому просторі."],
+    "502": ["Зв’язок із сервісом перервано", "Сервер не отримав коректної відповіді від Обліку. Спробуйте відкрити сторінку трохи пізніше. Перед повторенням операції перевірте її стан."],
+    "503": ["Облік ненадовго недоступний", "Сервіс тимчасово не може прийняти запит. Спробуйте відкрити сторінку пізніше. Перед повторенням операції перевірте її стан."],
+    "504": ["Відповідь займає більше часу", "Сервер не дочекався відповіді. Операція могла завершитися: перевірте її стан перед повторним збереженням або проведенням."],
+    "csrf": ["Оновіть сторінку перед дією", "Не вдалося підтвердити запит із цієї сторінки. Відкрийте потрібний розділ заново та повторіть дію."]
+  },
+  "en": {
+    "common": {"product": "ACCOUNTING FOR YOUR BUSINESS", "label": "System message", "actions": "Available actions", "home": "Home", "workspace": "Workspace", "help": "If this keeps happening, contact your organisation’s administrator", "signature": "Less routine. More clarity"},
+    "400": ["We couldn’t process this request", "Return to the section you need and try again. If you submitted a form, check the information you entered."],
+    "403": ["Access to this section is required", "Your permissions do not allow this action. Contact the organisation’s owner if you need access."],
+    "404": ["This page couldn’t be found", "The address may have changed or the link may contain a typo. Go to the home page or your workspace."],
+    "429": ["Let’s take a short pause", "Too many requests have been received. Wait before trying again. Sign-in attempts may require a pause of up to 15 minutes."],
+    "500": ["We couldn’t complete this action", "A system error occurred. Before saving or posting again, check the document’s status in your workspace."],
+    "502": ["The connection was interrupted", "The server did not receive a valid response from OBLIK. Try opening the page later. Check the operation’s status before repeating it."],
+    "503": ["OBLIK is temporarily unavailable", "The service cannot accept this request right now. Try opening the page later. Check the operation’s status before repeating it."],
+    "504": ["The response is taking longer", "The server timed out waiting for a response. The operation may have completed: check its status before saving or posting again."],
+    "csrf": ["Open the page again to continue", "We couldn’t verify the request from this page. Open the section you need again, then retry the action."]
+  },
+  "ru": {
+    "common": {"product": "УЧЁТ ДЛЯ ВАШЕГО БИЗНЕСА", "label": "Сообщение системы", "actions": "Доступные действия", "home": "На главную", "workspace": "Рабочее пространство", "help": "Если ситуация повторяется, обратитесь к администратору вашей организации", "signature": "Меньше рутины. Больше порядка"},
+    "400": ["Не удалось обработать запрос", "Вернитесь в нужный раздел и повторите действие. Если отправляли форму, проверьте введённые данные."],
+    "403": ["Нужен доступ к разделу", "Ваших прав недостаточно для этого действия. Обратитесь к владельцу организации, если вам нужен доступ."],
+    "404": ["Эта страница не найдена", "Возможно, адрес изменился или в ссылке есть ошибка. Перейдите на главную или в рабочее пространство."],
+    "429": ["Сделаем небольшую паузу", "Поступило слишком много запросов. Подождите перед следующей попыткой. Для входа пауза может длиться до 15 минут."],
+    "500": ["Не удалось завершить действие", "В системе произошла ошибка. Перед повторным сохранением или проведением проверьте состояние документа в рабочем пространстве."],
+    "502": ["Связь с сервисом прервана", "Сервер не получил корректного ответа от Обліку. Попробуйте открыть страницу позже. Перед повторением операции проверьте её состояние."],
+    "503": ["Облік временно недоступен", "Сервис временно не может принять запрос. Попробуйте открыть страницу позже. Перед повторением операции проверьте её состояние."],
+    "504": ["Ответ занимает больше времени", "Сервер не дождался ответа. Операция могла завершиться: проверьте её состояние перед повторным сохранением или проведением."],
+    "csrf": ["Откройте страницу заново", "Не удалось подтвердить запрос с этой страницы. Заново откройте нужный раздел и повторите действие."]
+  },
+  "cs": {
+    "common": {"product": "EVIDENCE PRO VAŠE PODNIKÁNÍ", "label": "Systémová zpráva", "actions": "Dostupné akce", "home": "Úvodní stránka", "workspace": "Pracovní prostor", "help": "Pokud se situace opakuje, obraťte se na správce své organizace", "signature": "Méně rutiny. Více přehledu"},
+    "400": ["Požadavek se nepodařilo zpracovat", "Vraťte se do požadované sekce a zkuste akci znovu. Pokud jste odeslali formulář, zkontrolujte zadané údaje."],
+    "403": ["K této sekci potřebujete přístup", "Vaše oprávnění tuto akci neumožňují. Pokud potřebujete přístup, obraťte se na vlastníka organizace."],
+    "404": ["Tato stránka nebyla nalezena", "Adresa se mohla změnit nebo je v odkazu překlep. Přejděte na úvodní stránku nebo do pracovního prostoru."],
+    "429": ["Dejme si krátkou pauzu", "Přišlo příliš mnoho požadavků. Před dalším pokusem počkejte. U přihlášení může přestávka trvat až 15 minut."],
+    "500": ["Akci se nepodařilo dokončit", "Došlo k systémové chybě. Než dokument znovu uložíte nebo zaúčtujete, zkontrolujte jeho stav v pracovním prostoru."],
+    "502": ["Spojení se službou bylo přerušeno", "Server neobdržel platnou odpověď od služby OBLIK. Zkuste stránku otevřít později. Před opakováním operace zkontrolujte její stav."],
+    "503": ["OBLIK je dočasně nedostupný", "Služba nyní nemůže přijmout požadavek. Zkuste stránku otevřít později. Před opakováním operace zkontrolujte její stav."],
+    "504": ["Odpověď trvá déle", "Server se nedočkal odpovědi. Operace mohla být dokončena: před dalším uložením nebo zaúčtováním zkontrolujte její stav."],
+    "csrf": ["Chcete-li pokračovat, otevřete stránku znovu", "Požadavek z této stránky se nepodařilo ověřit. Otevřete požadovanou sekci znovu a akci opakujte."]
+  }
+}

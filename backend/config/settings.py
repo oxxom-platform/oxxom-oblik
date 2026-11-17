@@ -11,7 +11,7 @@ ALLOWED_HOSTS = CONFIG["hosts"]
 CSRF_TRUSTED_ORIGINS = CONFIG["origins"]
 DATABASES = {"default": CONFIG["database"]}
 INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports"]
-MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
+MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "core.errors.ErrorPageMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
               "core.locale_middleware.InterfaceLanguageMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
               "django.contrib.auth.middleware.AuthenticationMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF = "config.urls"
@@ -20,6 +20,14 @@ ASGI_APPLICATION = "config.asgi.application"
 AUTH_USER_MODEL = "accounts.User"
 TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "APP_DIRS": True, "OPTIONS": {"context_processors": ["django.template.context_processors.csrf", "core.workspace.context", "core.i18n.context"]}}]
 OXXOM_MFA_KEY = os.environ.get("OXXOM_MFA_KEY", "")
+# Exact TCP peer only; HTTPS remains Gunicorn's separately validated policy.
+from accounts.client_address import canonical_address
+try:
+    OXXOM_AUTH_PROXY_IPS = tuple(canonical_address(value) for value in
+                               os.environ.get('OXXOM_PROXY_IP', '').split(',') if value.strip())
+except ValueError:
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured('OXXOM_PROXY_IP requires exact IP addresses') from None
 if not OXXOM_MFA_KEY and CONFIG["mode"] == "development":
     key_path = BASE_DIR.parent / ".secrets" / "mfa.key"
     if key_path.exists():
@@ -50,6 +58,7 @@ SESSION_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_AGE = 7 * 24 * 60 * 60
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_FAILURE_VIEW = 'core.errors.csrf_failure'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 131072

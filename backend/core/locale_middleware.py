@@ -43,7 +43,8 @@ class InterfaceLanguageMiddleware:
                 if 'Content-Length' in response:
                     response['Content-Length'] = len(response.content)
             if isinstance(response, JsonResponse) or response.get('Content-Type', '').startswith('text/html'):
-                response['Content-Language'] = 'uk' if '/print/' in request.path and response.status_code == 200 else code
+                if response.status_code < 400 or not response.has_header('Content-Language'):
+                    response['Content-Language'] = 'uk' if '/print/' in request.path and response.status_code == 200 else code
                 if public_language is None:
                     patch_vary_headers(response, ('Cookie',))
             if public_language is not None and response.status_code == 200:

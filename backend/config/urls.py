@@ -1,4 +1,8 @@
 from django.urls import path
+handler400 = 'core.errors.bad_request'
+handler403 = 'core.errors.permission_denied'
+handler404 = 'core.errors.not_found'
+handler500 = 'core.errors.server_error'
 from core.views import home, health, ready, brand_logo, brand_logo_svg, workspace_asset, landing_asset, ui_asset, robots, sitemap, public_brand_asset
 from core import workspace as workspace_views
 from accounts import auth_views

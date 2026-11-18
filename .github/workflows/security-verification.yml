@@ -10,9 +10,12 @@ on:
       - 'deploy/ubuntu/*session*'
       - 'deploy/ubuntu/collect-runtime.py'
       - 'deploy/ubuntu/check-runtime.sh'
+      - 'deploy/ubuntu/audit-backups.py'
+      - 'deploy/ubuntu/audit-backups.sh'
       - 'tests/test_request_update.py'
       - 'tests/test_session_update.py'
       - 'tests/test_runtime_inventory.py'
+      - 'tests/test_backup_audit.py'
       - '.github/workflows/security-verification.yml'
   schedule:
     - cron: '19 6 * * 1'

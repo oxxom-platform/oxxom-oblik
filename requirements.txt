@@ -1,4 +1,4 @@
-# Direct dependencies pinned. Full transitive lock pending successful installation.
+# Direct development inputs. Linux CPython 3.12 production uses requirements-production.lock.
 Django==5.2.19
 psycopg[binary]==3.2.13
 pyotp==2.9.0

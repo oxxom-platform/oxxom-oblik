@@ -1,6 +1,6 @@
 {
   "date": "2026-11-18",
-  "source_baseline": "608a6739fc668a12a0a24753ce3e7dbf65891f00",
+  "source_baseline": "16a844ed8efc857ca2b54a66daec55cf281eb232",
   "routes": [
     {
       "route": "/assets/brand/oxxom-oblik.svg",
@@ -170,6 +170,11 @@
     {
       "route": "/api/v1/auth/recovery/regenerate",
       "handler": "accounts.auth_views.regenerate_recovery",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/sessions/revoke-others",
+      "handler": "accounts.auth_views.terminate_other_sessions",
       "tenant_scoped": false
     },
     {
@@ -592,5 +597,6 @@
       "handler": "catalog_imports.views.recheck",
       "tenant_scoped": true
     }
-  ]
+  ],
+  "changeset": "SECURITY-01B-SESSIONS"
 }

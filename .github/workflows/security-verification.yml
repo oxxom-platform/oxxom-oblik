@@ -109,6 +109,11 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_runtime_inventory.py -v
           python deploy/ubuntu/collect-runtime.py --lock requirements-production.lock --python /tmp/oblik-runtime/bin/python > runtime-lock-comparison.json
+      - name: Verify the pinned read-only launcher against the isolated runtime
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVIEWED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: sh deploy/ubuntu/check-runtime.sh "$REVIEWED_SHA" /tmp/oblik-runtime/bin/python
       - name: Full Django suite under the locked runtime and PostgreSQL
         working-directory: backend
         run: |

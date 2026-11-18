@@ -31,6 +31,9 @@ offline через `--no-index --find-links`, виконує `pip check`, пор
 `deploy/ubuntu/check-runtime.sh FULL_COMMIT_SHA` завантажує точні collector і lock
 у приватну тимчасову папку, перевіряє їхні SHA256 й запускає read-only інвентар.
 Папка видаляється після завершення. Символьні/короткі refs не приймаються.
+Другий необов’язковий аргумент задає Python окремого перевірочного venv;
+CI перевіряє весь launcher на своєму ізольованому runtime. Без цього аргументу
+використовується фіксований шлях чинного Ubuntu venv.
 
 `deploy/ubuntu/collect-runtime.py --lock FILE` запускає лише ізольоване читання
 метаданих із `/srv/oxxom-oblik/venv/bin/python`. Аргумент `--python` призначений

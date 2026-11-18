@@ -1233,9 +1233,9 @@
       "area": "Session Management",
       "section": "Session Termination",
       "applicable": true,
-      "status": "FAIL",
+      "status": "PASS",
       "owner": "application",
-      "evidence_or_reason": "No user-facing terminate-other-sessions control after factor change; password changes invalidate existing session hashes. Track SEC-B03."
+      "evidence_or_reason": "Application source/test scope: fresh-TOTP terminate-other-sessions control and revocation on recovery regeneration; stale session rechecked under User row lock. Full 330-test suite passed on isolated PostgreSQL 16, including concurrency. Release acceptance requires green CI; installed Ubuntu behavior remains separately unverified. See SECURITY-01B-SESSIONS.md; SEC-B03."
     },
     {
       "id": "v5.0.0-7.4.4",

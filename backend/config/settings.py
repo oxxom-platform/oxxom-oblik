@@ -63,6 +63,17 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 131072
 DATA_UPLOAD_MAX_NUMBER_FILES = 1
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {'security_json': {'format': '%(message)s'}},
+    'handlers': {'security_console': {
+        'class': 'logging.StreamHandler', 'formatter': 'security_json',
+    }},
+    'loggers': {'oxxom.security': {
+        'handlers': ['security_console'], 'level': 'INFO', 'propagate': False,
+    }},
+}
 SESSION_COOKIE_SECURE = CONFIG["mode"] == "production"
 CSRF_COOKIE_SECURE = CONFIG["mode"] == "production"
 SECURE_SSL_REDIRECT = CONFIG["mode"] == "production"

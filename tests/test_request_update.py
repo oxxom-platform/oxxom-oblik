@@ -4,6 +4,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,11 +22,17 @@ guard = load('request_guard', ROOT / update.GUARD)
 
 
 class RequestUpdateTests(unittest.TestCase):
+    def historical_payload(self, name):
+        # This installer describes a pinned historical release. Future HEAD
+        # settings can change without invalidating its archive-validation tests.
+        return b'"Synthetic historical request-limit payload"\n'
+
     def archive(self, directory, corrupt=False, symlink=False):
         path = Path(directory) / 'release.tar.gz'
         with tarfile.open(path, 'w:gz') as bundle:
             for name in {*update.FILES, update.GUARD}:
-                data = (ROOT / name).read_bytes()
+                data = ((ROOT / name).read_bytes() if name == update.GUARD
+                        else self.historical_payload(name))
                 if corrupt and name in update.FILES:
                     data += b'# unreviewed'
                 item = tarfile.TarInfo('reviewed/' + name)
@@ -37,7 +44,9 @@ class RequestUpdateTests(unittest.TestCase):
         return path
 
     def test_package_scope_and_checksums_and_symlink_rejection(self):
-        with tempfile.TemporaryDirectory() as folder:
+        policy = {name: {**values, 'after': update.sha(self.historical_payload(name))}
+                  for name, values in update.FILES.items()}
+        with tempfile.TemporaryDirectory() as folder, patch.object(update, 'FILES', policy):
             helper, payload = update.package(self.archive(folder))
             self.assertEqual(set(payload), {
                 'backend/config/settings.py', 'backend/core/request_limits.py'})

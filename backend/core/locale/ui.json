@@ -5488,5 +5488,55 @@
     "Let’s discuss your business needs and OXXOM OBLIK. Email us or open the demo request form.",
     "Обсудим задачи вашего бизнеса и возможности OXXOM OBLIK. Напишите нам или откройте форму записи на демонстрацию.",
     "Proberme potřeby vašeho podnikání a možnosti OXXOM OBLIK. Napište nám nebo otevřete formulář pro domluvení ukázky."
+  ],
+  "Резервні коди": [
+    "Recovery codes",
+    "Резервные коды",
+    "Záložní kódy"
+  ],
+  "Нові резервні коди скасують попередні та завершать інші активні сесії.": [
+    "New recovery codes will replace the old ones and end other active sessions.",
+    "Новые резервные коды отменят предыдущие и завершат другие активные сессии.",
+    "Nové záložní kódy nahradí původní a ukončí ostatní aktivní relace."
+  ],
+  "Вхід на інших пристроях": [
+    "Sign-ins on other devices",
+    "Вход на других устройствах",
+    "Přihlášení na jiných zařízeních"
+  ],
+  "Якщо ви входили на чужому пристрої або підозрюєте сторонній доступ, завершіть інші сесії. Цей вхід залишиться активним.": [
+    "If you signed in on a shared device or suspect unauthorized access, end other sessions. This sign-in will remain active.",
+    "Если вы входили на чужом устройстве или подозреваете посторонний доступ, завершите другие сессии. Этот вход останется активным.",
+    "Pokud jste se přihlásili na cizím zařízení nebo máte podezření na neoprávněný přístup, ukončete ostatní relace. Toto přihlášení zůstane aktivní."
+  ],
+  "Новий код із застосунку для підтвердження": [
+    "New code from your authenticator app",
+    "Новый код из приложения для подтверждения",
+    "Nový kód z ověřovací aplikace"
+  ],
+  "Потрібен свіжий шестизначний код. Уже використаний або резервний код не підійде.": [
+    "Use a fresh six-digit code. A previously used code or a recovery code cannot be used.",
+    "Нужен свежий шестизначный код. Уже использованный или резервный код не подойдёт.",
+    "Použijte nový šestimístný kód. Již použitý ani záložní kód nelze použít."
+  ],
+  "Вийти на інших пристроях": [
+    "Sign out other devices",
+    "Выйти на других устройствах",
+    "Odhlásit ostatní zařízení"
+  ],
+  "Інші сесії завершено. Цей вхід залишається активним.": [
+    "Other sessions ended. This sign-in remains active.",
+    "Другие сессии завершены. Этот вход остаётся активным.",
+    "Ostatní relace byly ukončeny. Toto přihlášení zůstává aktivní."
+  ],
+  "Збережіть нові резервні коди. Попередні коди скасовано, інші сесії завершено.": [
+    "Save the new recovery codes. The old codes are revoked and other sessions have ended.",
+    "Сохраните новые резервные коды. Предыдущие коды отменены, другие сессии завершены.",
+    "Uložte si nové záložní kódy. Původní kódy jsou zneplatněny a ostatní relace byly ukončeny."
+  ],
+  "Сесію завершено. Увійдіть знову.": [
+    "Your session has ended. Sign in again.",
+    "Сессия завершена. Войдите снова.",
+    "Vaše relace skončila. Přihlaste se znovu."
   ]
 }

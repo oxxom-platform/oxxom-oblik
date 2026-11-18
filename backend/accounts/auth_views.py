@@ -18,6 +18,7 @@ from .access import memberships_for
 from .models import User, TOTPDevice, AuthThrottle
 from .mfa import encrypt, decrypt, consume_totp, consume_recovery, recovery_codes, provisioning_qr
 from .client_address import validated_auth_source
+from .session_security import locked_session_user, revoke_other_sessions, security_event
 
 
 def has_mfa_session(request, now):
@@ -80,7 +81,10 @@ def auth_page(request):
     security_mode = request.GET.get('security') == '1'
     if not security_mode and has_mfa_session(request, time.time()):
         return redirect('/app/')
-    return render(request, "accounts/login.html", {'security_mode': security_mode})
+    return render(request, "accounts/login.html", {
+        'security_mode': security_mode,
+        'session_verified': has_mfa_session(request, time.time()),
+    })
 
 
 @require_GET
@@ -208,12 +212,16 @@ def sign_out(request):
 @protected
 @validated_auth_source
 @sensitive_post_parameters()
+@sensitive_variables()
 def regenerate_recovery(request):
     if not settings.OXXOM_MFA_KEY:
         return unavailable()
     # Require a fresh TOTP, not a recovery code, for this sensitive operation.
     with transaction.atomic():
-        user = User.objects.select_for_update().get(pk=request.user.pk)
+        user = locked_session_user(request)
+        if user is None:
+            logout(request)
+            return JsonResponse({'error': 'authentication_required'}, status=401)
         records = throttle_rows(request, user.email)
         if blocked(records):
             return JsonResponse({"error": "too_many_attempts"}, status=429)
@@ -223,5 +231,39 @@ def regenerate_recovery(request):
         except InvalidToken:
             return unavailable()
         if not valid:
+            security_event('recovery.regenerate', user, 'invalid_factor')
             return failure(records)
-        return JsonResponse({"recovery_codes": recovery_codes(user)})
+        codes = recovery_codes(user)
+        revoke_other_sessions(request, user)
+        security_event('recovery.regenerate', user, 'other_sessions_revoked')
+        return JsonResponse({"recovery_codes": codes})
+
+
+@require_POST
+@protected
+@validated_auth_source
+@sensitive_post_parameters()
+@sensitive_variables()
+def terminate_other_sessions(request):
+    if not settings.OXXOM_MFA_KEY:
+        return unavailable()
+    # Never accept a recovery code as step-up authorization for session control.
+    with transaction.atomic():
+        user = locked_session_user(request)
+        if user is None:
+            logout(request)
+            return JsonResponse({'error': 'authentication_required'}, status=401)
+        records = throttle_rows(request, user.email)
+        if blocked(records):
+            return JsonResponse({'error': 'too_many_attempts'}, status=429)
+        device = TOTPDevice.objects.filter(user=user, confirmed=True).first()
+        try:
+            valid = device and consume_totp(device, request.POST.get('code', '').strip())
+        except InvalidToken:
+            return unavailable()
+        if not valid:
+            security_event('sessions.revoke_others', user, 'invalid_factor')
+            return failure(records)
+        revoke_other_sessions(request, user)
+        security_event('sessions.revoke_others', user, 'success')
+        return JsonResponse({'status': 'other_sessions_revoked'})

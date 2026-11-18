@@ -41,6 +41,7 @@ urlpatterns += [
     path("api/v1/auth/verify", auth_views.verify),
     path("api/v1/auth/logout", auth_views.sign_out),
     path("api/v1/auth/recovery/regenerate", auth_views.regenerate_recovery),
+    path("api/v1/auth/sessions/revoke-others", auth_views.terminate_other_sessions),
     path("api/v1/organizations", auth_views.organizations),
 ]
 

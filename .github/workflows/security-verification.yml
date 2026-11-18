@@ -6,7 +6,9 @@ on:
       - 'requirements*.txt'
       - '.gitleaksignore'
       - 'deploy/ubuntu/*request*'
+      - 'deploy/ubuntu/*session*'
       - 'tests/test_request_update.py'
+      - 'tests/test_session_update.py'
       - '.github/workflows/security-verification.yml'
   schedule:
     - cron: '19 6 * * 1'
@@ -103,3 +105,4 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s tests -p test_request_update.py -v
+      - run: python -m unittest discover -s tests -p test_session_update.py -v

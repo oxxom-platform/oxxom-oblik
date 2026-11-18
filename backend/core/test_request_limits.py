@@ -6,8 +6,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.test import Client, RequestFactory, SimpleTestCase, TestCase
 from django.core.handlers.wsgi import WSGIRequest
+import pyotp
 
-from accounts.models import AuthThrottle
+from accounts.models import AuthThrottle, Membership, Organization, TOTPDevice, User
+from accounts.mfa import encrypt
 from .request_limits import (
     API_LIMIT, AUTH_LIMIT, IMPORT_LIMIT, RequestBodyLimitMiddleware,
 )
@@ -86,3 +88,33 @@ class ParsingOrderTests(TestCase):
         response = self.client.post(path, {'file': SimpleUploadedFile('catalog.csv', b'name\nTest\n')},
                                     HTTP_X_CSRFTOKEN=self.csrf)
         self.assertEqual(response.status_code, 401)
+
+    def test_legitimate_multipart_login_mfa_and_csv_with_real_csrf_checks(self):
+        password = 'Synthetic-Parsing-Only-648!'
+        user = User.objects.create_user('parsing@example.test', password)
+        org = Organization.objects.create(name='Synthetic import tenant')
+        Membership.objects.create(user=user, organization=org, role='owner')
+        secret = pyotp.random_base32()
+        TOTPDevice.objects.create(user=user, secret=encrypt(secret), confirmed=True)
+        response = self.client.post('/api/v1/auth/login', {
+            'email': user.email, 'password': password,
+        }, HTTP_X_CSRFTOKEN=self.csrf)
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/api/v1/auth/verify', {'code': pyotp.TOTP(secret).now()},
+                                    HTTP_X_CSRFTOKEN=self.csrf)
+        self.assertEqual(response.status_code, 200)
+        csrf = self.client.cookies['csrftoken'].value  # Login rotates the CSRF secret.
+        path = f'/api/v1/organizations/{org.pk}/imports/units/preview'
+        response = self.client.post(path, {
+            'file': SimpleUploadedFile('catalog.csv', b'name;symbol\nSynthetic;sy\n'),
+        }, HTTP_X_CSRFTOKEN=csrf)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['batch']['counts'], {'new': 1, 'duplicate': 0, 'error': 0})
+
+    def test_multiple_small_files_are_rejected(self):
+        response = self.client.post('/api/v1/auth/login', {
+            'a': SimpleUploadedFile('one.csv', b'name\nA\n'),
+            'b': SimpleUploadedFile('two.csv', b'name\nB\n'),
+        }, HTTP_X_CSRFTOKEN=self.csrf)
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(AuthThrottle.objects.exists())

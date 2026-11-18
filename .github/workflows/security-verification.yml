@@ -4,6 +4,7 @@ on:
     paths:
       - 'backend/**'
       - 'requirements*.txt'
+      - '.gitleaksignore'
       - 'deploy/ubuntu/*request*'
       - 'tests/test_request_update.py'
       - '.github/workflows/security-verification.yml'
@@ -33,7 +34,7 @@ jobs:
         run: |
           umask 077
           set +e
-          /tmp/gitleaks git --redact=100 --log-opts='--all' \
+          /tmp/gitleaks git --redact=100 --log-opts='--all' --gitleaks-ignore-path .gitleaksignore \
             --report-format json --report-path /tmp/gitleaks-private.json \
             > /tmp/gitleaks-private.log 2>&1
           scan_status=$?

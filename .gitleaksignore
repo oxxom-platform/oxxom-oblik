@@ -1,0 +1,4 @@
+# Reviewed SECURITY-01B false positive: synthetic UUID literal in a printing
+# test's idempotency_key payload, not an authentication key. Exact historical
+# commit/path/rule/line only; no directory or rule-wide exclusion.
+73dd8499ab108eb164858aef0e86906ae4a3cd2e:backend/printing/tests.py:generic-api-key:36

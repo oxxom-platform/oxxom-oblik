@@ -1,6 +1,6 @@
 # Поточний стан OXXOM OBLIK
 
-Оновлено 17.11.2026. Поточний застосунок — Django/PostgreSQL у `backend/`.
+Оновлено 18.11.2026. Поточний застосунок — Django/PostgreSQL у `backend/`.
 Публічна адреса: https://oblik.oxxom.com.ua/.
 
 Цей документ узагальнює стан продукту. ТЗ й протоколи окремих етапів зберігають
@@ -45,6 +45,11 @@
 `200 OK` від backend за запитом із reverse proxy.
 
 ## Що ще не прийнято як завершене
+
+[SECURITY-01B](security/SECURITY-01B-RESULTS.md): прикладні ліміти до CSRF,
+негативна перевірка всіх tenant API, dependency/history CI і початковий ASVS
+реєстр. Установка middleware на Ubuntu та повний аудит ще не підтверджені.
+SECURITY-01B не оголошує весь продукт ASVS L2 compliant.
 
 | Напрям | Залишилося |
 |---|---|

@@ -1,0 +1,596 @@
+{
+  "date": "2026-11-18",
+  "source_baseline": "608a6739fc668a12a0a24753ce3e7dbf65891f00",
+  "routes": [
+    {
+      "route": "/assets/brand/oxxom-oblik.svg",
+      "handler": "core.views.brand_logo_svg",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/brand/oxxom-oblik.png",
+      "handler": "core.views.brand_logo",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/",
+      "handler": "core.views.home",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/health",
+      "handler": "core.views.health",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/ready",
+      "handler": "core.views.ready",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/demo/",
+      "handler": "demo_booking.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/en/demo/",
+      "handler": "demo_booking.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/ru/demo/",
+      "handler": "demo_booking.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/cs/demo/",
+      "handler": "demo_booking.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/public/demo-requests",
+      "handler": "demo_booking.views.submit",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/en/",
+      "handler": "core.views.home",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/ru/",
+      "handler": "core.views.home",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/favicon.ico",
+      "handler": "core.views.public_brand_asset",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/cs/",
+      "handler": "core.views.home",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/robots.txt",
+      "handler": "core.views.robots",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/sitemap.xml",
+      "handler": "core.views.sitemap",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/brand/<str:filename>",
+      "handler": "core.views.public_brand_asset",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/app/",
+      "handler": "core.workspace.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/team/",
+      "handler": "accounts.member_views.workspace",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/workspace/<str:filename>",
+      "handler": "core.views.workspace_asset",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/landing/<str:filename>",
+      "handler": "core.views.landing_asset",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/ui/<str:filename>",
+      "handler": "core.views.ui_asset",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/workspace-overview",
+      "handler": "core.workspace.overview",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/members",
+      "handler": "accounts.member_views.members",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/members/add",
+      "handler": "accounts.member_views.add_member",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/members/<uuid:membership_id>",
+      "handler": "accounts.member_views.change_member",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/access-events",
+      "handler": "accounts.member_views.access_events",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/login/",
+      "handler": "accounts.auth_views.auth_page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/assets/auth/login.js",
+      "handler": "accounts.auth_views.login_script",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/login",
+      "handler": "accounts.auth_views.password_login",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/setup",
+      "handler": "accounts.auth_views.setup",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/verify",
+      "handler": "accounts.auth_views.verify",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/logout",
+      "handler": "accounts.auth_views.sign_out",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/auth/recovery/regenerate",
+      "handler": "accounts.auth_views.regenerate_recovery",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations",
+      "handler": "accounts.auth_views.organizations",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/catalog/",
+      "handler": "catalog.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/catalog-permissions",
+      "handler": "catalog.views.permissions",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/catalog/<str:kind>",
+      "handler": "catalog.views.records",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/catalog/<str:kind>/add",
+      "handler": "catalog.views.add",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/catalog/<str:kind>/<uuid:record_id>",
+      "handler": "catalog.views.update",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/catalog/<str:kind>/<uuid:record_id>/state",
+      "handler": "catalog.views.state",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/documents/",
+      "handler": "documents.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/document-permissions",
+      "handler": "documents.views.permissions",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents",
+      "handler": "documents.views.listing",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/add",
+      "handler": "documents.views.add",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>",
+      "handler": "documents.views.detail",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/save",
+      "handler": "documents.views.update",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/state",
+      "handler": "documents.views.state",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/copy",
+      "handler": "documents.views.copy",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/inventory/",
+      "handler": "inventory.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory-permissions",
+      "handler": "inventory.views.permissions",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory",
+      "handler": "inventory.views.listing",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/add",
+      "handler": "inventory.views.add",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>",
+      "handler": "inventory.views.detail",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>/save",
+      "handler": "inventory.views.update",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>/state",
+      "handler": "inventory.views.state",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/stock/",
+      "handler": "posting.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/balances",
+      "handler": "posting.views.balances",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/movements",
+      "handler": "posting.views.movements",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/period",
+      "handler": "posting.views.period",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/period/save",
+      "handler": "posting.views.change_period",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/post",
+      "handler": "posting.views.post_sale",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/reverse",
+      "handler": "posting.views.reverse_sale",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>/post",
+      "handler": "posting.views.post_stock",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>/reverse",
+      "handler": "posting.views.reverse_stock",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/operations/",
+      "handler": "operations.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operation-permissions",
+      "handler": "operations.views.permissions",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations",
+      "handler": "operations.views.listing",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/add",
+      "handler": "operations.views.add",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>",
+      "handler": "operations.views.detail",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>/save",
+      "handler": "operations.views.update",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>/state",
+      "handler": "operations.views.state",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>/post",
+      "handler": "posting.views.post_operation",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>/reverse",
+      "handler": "posting.views.reverse_operation",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/return-sources",
+      "handler": "operations.views.return_sources",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/return-sources/<uuid:sale_id>",
+      "handler": "operations.views.return_lines",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/save-and-post",
+      "handler": "posting.views.save_post_sale",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/documents/<uuid:document_id>/save-and-post",
+      "handler": "posting.views.save_post_sale",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/save-and-post",
+      "handler": "posting.views.save_post_stock",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/inventory/<uuid:document_id>/save-and-post",
+      "handler": "posting.views.save_post_stock",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/save-and-post",
+      "handler": "posting.views.save_post_operation",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/operations/<uuid:document_id>/save-and-post",
+      "handler": "posting.views.save_post_operation",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/payments/",
+      "handler": "payments.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payment-permissions",
+      "handler": "payments.views.permissions",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/money-accounts",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/money-accounts/add",
+      "handler": "payments.views.save_account",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/money-accounts/<uuid:account_id>/save",
+      "handler": "payments.views.save_account",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/add",
+      "handler": "payments.views.add",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/save-and-post",
+      "handler": "payments.views.save_post",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/save",
+      "handler": "payments.views.update",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/save-and-post",
+      "handler": "payments.views.save_post",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/post",
+      "handler": "payments.views.post",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/reverse",
+      "handler": "payments.views.reverse",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/allocate",
+      "handler": "payments.views.allocate",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payments/<uuid:payment_id>/state",
+      "handler": "payments.views.state",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payment-documents",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/debts",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/money-movements",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/payment-events",
+      "handler": "payments.views.wrapped",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/reports/",
+      "handler": "reports.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/report-options",
+      "handler": "reports.views.options",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/reports/<str:kind>",
+      "handler": "reports.views.data",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/reports/<str:kind>/export",
+      "handler": "reports.views.export",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/organization-details/",
+      "handler": "printing.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/issuer-profile",
+      "handler": "printing.views.profile",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/issuer-profile/save",
+      "handler": "printing.views.update_profile",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/issuer-events",
+      "handler": "printing.views.profile_events",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/print/<uuid:organization_id>/<uuid:document_id>/<str:kind>/",
+      "handler": "printing.views.preview",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/imports/",
+      "handler": "catalog_imports.views.page",
+      "tenant_scoped": false
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/import-options",
+      "handler": "catalog_imports.views.options",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/import-templates/<str:kind>",
+      "handler": "catalog_imports.views.template",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/imports",
+      "handler": "catalog_imports.views.listing",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/imports/<str:kind>/preview",
+      "handler": "catalog_imports.views.preview",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/imports/<uuid:batch_id>",
+      "handler": "catalog_imports.views.detail",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/imports/<uuid:batch_id>/confirm",
+      "handler": "catalog_imports.views.apply",
+      "tenant_scoped": true
+    },
+    {
+      "route": "/api/v1/organizations/<uuid:organization_id>/imports/<uuid:batch_id>/refresh",
+      "handler": "catalog_imports.views.recheck",
+      "tenant_scoped": true
+    }
+  ]
+}

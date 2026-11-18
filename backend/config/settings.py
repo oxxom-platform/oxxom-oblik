@@ -12,7 +12,7 @@ CSRF_TRUSTED_ORIGINS = CONFIG["origins"]
 DATABASES = {"default": CONFIG["database"]}
 INSTALLED_APPS = ["django.contrib.auth", "django.contrib.contenttypes", "django.contrib.sessions", "accounts", "core", "catalog", "documents", "inventory", "posting", "operations", "payments", "reports", "printing", "catalog_imports", "demo_booking"]
 MIDDLEWARE = ["core.seo.SearchIndexPolicyMiddleware", "core.errors.ErrorPageMiddleware", "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
-              "core.locale_middleware.InterfaceLanguageMiddleware", "demo_booking.middleware.DemoBodyLimitMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
+              "core.locale_middleware.InterfaceLanguageMiddleware", "core.request_limits.RequestBodyLimitMiddleware", "demo_booking.middleware.DemoBodyLimitMiddleware", "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
               "django.contrib.auth.middleware.AuthenticationMiddleware", "django.middleware.clickjacking.XFrameOptionsMiddleware"]
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
@@ -62,6 +62,7 @@ CSRF_FAILURE_VIEW = 'core.errors.csrf_failure'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 DATA_UPLOAD_MAX_MEMORY_SIZE = 131072
+DATA_UPLOAD_MAX_NUMBER_FILES = 1
 SESSION_COOKIE_SECURE = CONFIG["mode"] == "production"
 CSRF_COOKIE_SECURE = CONFIG["mode"] == "production"
 SECURE_SSL_REDIRECT = CONFIG["mode"] == "production"

@@ -1,0 +1,73 @@
+{
+  "tool": "pip-audit 2.10.1",
+  "python": "3.12",
+  "environment": "isolated Ubuntu 24.04 CI, not installed production VM",
+  "date": "2026-11-18",
+  "workflow_run": 44263269844,
+  "head": "93a68c98fd7d819c9c29fccc4b1234b4f1948406",
+  "result": {
+    "dependencies": [
+      {
+        "name": "asgiref",
+        "version": "3.13.0",
+        "vulns": []
+      },
+      {
+        "name": "cffi",
+        "version": "2.1.1",
+        "vulns": []
+      },
+      {
+        "name": "cryptography",
+        "version": "50.0.2",
+        "vulns": []
+      },
+      {
+        "name": "django",
+        "version": "5.2.19",
+        "vulns": []
+      },
+      {
+        "name": "gunicorn",
+        "version": "27.0.1",
+        "vulns": []
+      },
+      {
+        "name": "psycopg",
+        "version": "3.2.13",
+        "vulns": []
+      },
+      {
+        "name": "psycopg-binary",
+        "version": "3.2.13",
+        "vulns": []
+      },
+      {
+        "name": "pycparser",
+        "version": "3.12",
+        "vulns": []
+      },
+      {
+        "name": "pyotp",
+        "version": "2.9.0",
+        "vulns": []
+      },
+      {
+        "name": "qrcode",
+        "version": "8.2",
+        "vulns": []
+      },
+      {
+        "name": "sqlparse",
+        "version": "0.6.1",
+        "vulns": []
+      },
+      {
+        "name": "typing-extensions",
+        "version": "4.16.0",
+        "vulns": []
+      }
+    ],
+    "fixes": []
+  }
+}

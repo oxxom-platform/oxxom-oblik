@@ -91,6 +91,9 @@ def context(code):
         encoded = encoded.replace(character, chr(92) + 'u' + escaped)
     return {'seo': seo, 'seo_alternates': alternates, 'seo_jsonld': encoded,
             'demo_url': LANGUAGES[code]['path'] + 'demo/',
+            # Footer link to the OXXOM company page about OBLIK, same language (Russian falls back to Ukrainian).
+            'developer': {'url': 'https://www.oxxom.com.ua' + {'en': '/en', 'cs': '/cs'}.get(code, '') + '/produkty/oxxom-oblik/',
+                          'label': text('Розробник: OXXOM', code)},
             'public_assets': assets, 'ui_language': code,
             'landing_data': {'language': code, 'locale': seo['locale'],
                              'urls': {key: item['path'] for key, item in LANGUAGES.items()},

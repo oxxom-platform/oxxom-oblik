@@ -66,8 +66,10 @@ scan VM; додаткові/невідомі пакети вимагають з�
 | Чистий Linux amd64, CPython 3.12.16 | 12 пакетів завантажені з SHA256 та offline встановлені; `pip check` PASS; collector MATCH |
 | Негативні перевірки | Строгий lock, ціль/venv/набір, зайві пакети/dedup/direct URL, приховування stderr, узгодженість input hashes, pinned launcher і відмова pip на підміненому wheel; остаточний набір у CI |
 | Актуальний advisory scan resolved runtime | 12 пакетів, 0 відомих advisory findings на момент локальної перевірки; не гарантія відсутності невідомих вразливостей |
-| Ubuntu PostgreSQL CI цього випуску | Потрібен PASS перед merge; результат зберігається в PR/Actions |
-| Фактичні пакети робочої VM | NOT TESTED, звіт ще не отримано |
+| Ubuntu PostgreSQL CI цього випуску | PR #12: 330 Django tests та 7 inventory/lock tests PASS; усі 3 checks успішні, включно з історією секретів та advisory scan |
+| Фактичні пакети робочої VM | Власник передав MATCH: CPython 3.12.3, усі 12 runtime-версій збігаються, немає відсутніх/зайвих пакетів, дублікатів, некоректних метаданих або direct URL |
+| Lock фактичної перевірки | SHA256 `a2d23db421dbb06a6cab080a694360954793a802261f464471f27d63a285ea2b` відповідає перевіреному випуску `4d007625c5f236a88e03b9bc7a51e5b936da73d7` |
+| Файли вже встановлених пакетів | NOT TESTED: `installed_artifact_hashes_verified=false`; metadata MATCH не є доказом цілісності файлів |
 
 Попередній блок сесій установлений: власник передав `SECURITY-01B-SESSIONS OK`.
 Браузерний сценарій двох сесій відкладено й залишається NOT TESTED.

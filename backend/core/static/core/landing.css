@@ -56,4 +56,4 @@ html{scroll-behavior:auto}.device-app,.phone-ui,.app-bars i,.app-donut,.floating
 .mobile-nav .public-language-options{position:static;min-width:220px;margin-top:8px;box-shadow:none;grid-template-columns:1fr;padding:6px}
 .mobile-nav .public-language-options>a{border:0;padding:11px 12px;min-height:44px}
 
-.site-footer .footer-contact{font-size:13px;min-height:44px;display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
+.site-footer .footer-developer{font-size:11px;min-height:44px;display:inline-flex;align-items:center;color:#5a7b67;text-decoration:underline;text-underline-offset:3px}.site-footer .footer-developer:hover{color:var(--ink)}.site-footer .footer-contact{font-size:13px;min-height:44px;display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}

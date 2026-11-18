@@ -71,6 +71,25 @@ curl --fail --silent --show-error --connect-timeout 3 --max-time 10 \
 ініціалізація VM або первинне відновлення дампу не є способом оновлення
 працюючої системи.
 
+## Залежності нового ізольованого оточення
+
+Для Linux x86_64/CPython 3.12 підготовлено `requirements-production.lock`:
+усі runtime-залежності закріплено точними версіями й SHA256. У файлі примусово
+увімкнені `--require-hashes` та `--only-binary=:all:`. Перед майбутнім контрольованим
+переходом нове окреме оточення перевіряють так:
+
+```sh
+python3.12 -m venv /tmp/oblik-runtime-review
+/tmp/oblik-runtime-review/bin/python -m pip install --require-hashes --only-binary=:all: -r requirements-production.lock
+/tmp/oblik-runtime-review/bin/python -m pip check
+```
+
+Це не команда заміни чинного `/srv/oxxom-oblik/venv`. Спочатку отримати фактичний
+інвентар, перевірити PostgreSQL suite та спланувати активацію й відкат окремо.
+Для читання метаданих наявного runtime використовується `collect-runtime.py`;
+він не імпортує Django, не читає `app.env` та не змінює пакети або службу.
+[Протокол і межі SECURITY-01C-DEPS](security/SECURITY-01C-DEPENDENCIES.md).
+
 ## Резервні копії
 
 Підтверджені зашифрована копія на окремому Windows-сервері та її перевірене

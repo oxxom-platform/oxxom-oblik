@@ -1,0 +1,38 @@
+name: Read-only backup discovery
+on:
+  pull_request:
+    paths:
+      - 'deploy/ubuntu/audit-backups.py'
+      - 'deploy/ubuntu/audit-backups.sh'
+      - 'tests/test_backup_audit.py'
+      - '.github/workflows/backup-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  metadata:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_backup_audit.py -v
+      - name: Read-only command against the disposable CI host
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVIEWED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          sh deploy/ubuntu/audit-backups.sh "$REVIEWED_SHA" > /tmp/backup-audit-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          result = json.loads(Path('/tmp/backup-audit-result.json').read_text())
+          assert result['status'] == 'OBSERVED'
+          assert result['local_receipts']['latest_remote_backup_freshness_verified'] is False
+          assert result['unverified']
+          print('Metadata-only launcher completed; no backup acceptance claim')
+          PY
